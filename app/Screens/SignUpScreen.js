@@ -8,13 +8,14 @@ import Screen from "../components/Screen";
 import Text from "../components/Text";
 
 const validationSchema = Yup.object().shape({
+  name: Yup.string().required().min(1).label("Name"),
   email: Yup.string().required().email().label("Email"),
   password: Yup.string().required().min(8).label("Password"),
 });
 
-function LoginScreen() {
-  const handleSubmit = async ({ email, password }) => {
-    console.log(email, password);
+function SignUpScreen() {
+  const handleSubmit = async (info) => {
+    console.log(info);
   };
 
   return (
@@ -27,6 +28,14 @@ function LoginScreen() {
         inititalValues={{ email: "", password: "" }}
         onSubmit={handleSubmit}
         validationSchema={validationSchema}>
+        <FormField
+          autoCapitalize="words"
+          autoCorrect={false}
+          keyboardType="email-address"
+          name="name"
+          placeholder="Name"
+          textContentType="name"
+        />
         <FormField
           autoCapitalize="none"
           autoCorrect={false}
@@ -44,7 +53,7 @@ function LoginScreen() {
           secureTextEntry
           textContentType="password"
         />
-        <SubmitButton title="Login" />
+        <SubmitButton title="Sign Up" />
       </Form>
     </Screen>
   );
@@ -72,4 +81,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default SignUpScreen;
