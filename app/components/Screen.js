@@ -1,11 +1,21 @@
 import Constants from "expo-constants";
 import React from "react";
-import { View, StyleSheet, SafeAreaView } from "react-native";
+import {
+  View,
+  StyleSheet,
+  SafeAreaView,
+  KeyboardAvoidingView,
+  ScrollView,
+} from "react-native";
 
 function Screen({ children, style }) {
   return (
     <SafeAreaView style={[styles.screen, style]}>
-      <View style={[styles.view, style]}>{children}</View>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}>
+        <View style={[styles.view, style]}>{children}</View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
