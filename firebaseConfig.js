@@ -8,6 +8,7 @@ import {
   MESSAGINGSENDERID,
   APPID,
 } from "@env";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: APIKEY,
@@ -20,3 +21,4 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth();
+export const storage = getStorage();

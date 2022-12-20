@@ -1,4 +1,5 @@
 import React from "react";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { StyleSheet, Image, View } from "react-native";
 import * as Yup from "yup";
 
@@ -7,7 +8,6 @@ import SubmitButton from "../components/form/SubmitButton";
 import Screen from "../components/Screen";
 import Text from "../components/Text";
 import { auth } from "../../firebaseConfig";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import colors from "../config/colors";
 
 const validationSchema = Yup.object().shape({
@@ -18,14 +18,18 @@ const validationSchema = Yup.object().shape({
 
 function SignUpScreen() {
   const handleSubmit = async ({ name, email, password }) => {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-      });
+    try {
+      const res = await createUserWithEmailAndPassword(auth, email, password);
+      try {
+        await updateProfile(res.user, {
+          displayName: name,
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
