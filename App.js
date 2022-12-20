@@ -4,5 +4,5 @@ import WelcomeScreen from "./app/Screens/WelcomeScreen";
 import SignUpScreen from "./app/Screens/SignUpScreen";
 
 export default function App() {
-  return <SignUpScreen />;
+  return <LoginScreen />;
 }

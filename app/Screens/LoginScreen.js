@@ -1,11 +1,14 @@
+import { signInWithEmailAndPassword } from "firebase/auth";
 import React from "react";
 import { StyleSheet, Image, View } from "react-native";
 import * as Yup from "yup";
+import { auth } from "../../firebaseConfig";
 
 import { AppForm as Form, AppFormField as FormField } from "../components/form";
 import SubmitButton from "../components/form/SubmitButton";
 import Screen from "../components/Screen";
 import Text from "../components/Text";
+import colors from "../config/colors";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -14,7 +17,15 @@ const validationSchema = Yup.object().shape({
 
 function LoginScreen() {
   const handleSubmit = async ({ email, password }) => {
-    console.log(email, password);
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log(user);
+      })
+      .catch((e) => {
+        const errorCode = e.code;
+        const errorMessage = e.message;
+      });
   };
 
   return (
@@ -23,29 +34,31 @@ function LoginScreen() {
         <Image style={styles.icon} source={require("../assets/icon.png")} />
         <Text style={styles.text}>MJP Systems</Text>
       </View>
-      <Form
-        inititalValues={{ email: "", password: "" }}
-        onSubmit={handleSubmit}
-        validationSchema={validationSchema}>
-        <FormField
-          autoCapitalize="none"
-          autoCorrect={false}
-          keyboardType="email-address"
-          name="email"
-          placeholder="Email"
-          textContentType="emailAddress"
-        />
-        <FormField
-          autoCapitalize="none"
-          autoCorrect={false}
-          icon="lock"
-          name="password"
-          placeholder="Password"
-          secureTextEntry
-          textContentType="password"
-        />
-        <SubmitButton title="Login" />
-      </Form>
+      <View style={styles.form}>
+        <Form
+          inititalValues={{ email: "", password: "" }}
+          onSubmit={handleSubmit}
+          validationSchema={validationSchema}>
+          <FormField
+            autoCapitalize="none"
+            autoCorrect={false}
+            keyboardType="email-address"
+            name="email"
+            placeholder="Email"
+            textContentType="emailAddress"
+          />
+          <FormField
+            autoCapitalize="none"
+            autoCorrect={false}
+            icon="lock"
+            name="password"
+            placeholder="Password"
+            secureTextEntry
+            textContentType="password"
+          />
+          <SubmitButton title="Login" />
+        </Form>
+      </View>
     </Screen>
   );
 }
@@ -56,14 +69,18 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "center",
   },
-  logoContainer: {
-    alignItems: "center",
-    position: "absolute",
-    top: 70,
+  form: {
+    backgroundColor: colors.white,
+    width: "100%",
   },
   icon: {
     width: 150,
     height: 150,
+  },
+  logoContainer: {
+    alignItems: "center",
+    position: "absolute",
+    top: 70,
   },
   text: {
     fontSize: 25,
