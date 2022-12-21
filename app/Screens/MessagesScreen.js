@@ -33,7 +33,7 @@ const messages = [
 
 function MessagesScreen() {
   return (
-    <Screen style={styles.screen}>
+    <Screen style={styles.screen} disableScroll>
       {messages.length > 0 ? (
         <FlatList
           data={messages}

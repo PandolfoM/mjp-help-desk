@@ -8,17 +8,21 @@ import {
   ScrollView,
 } from "react-native";
 
-function Screen({ children, style }) {
+function Screen({ children, style, disableScroll }) {
   return (
     <SafeAreaView style={[styles.screen, style]}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1 }}>
-        {/* <ScrollView
-          contentContainerStyle={{ flexGrow: 1 }}
-          keyboardShouldPersistTaps="handled"> */}
-        <View style={[styles.view, style]}>{children}</View>
-        {/* </ScrollView> */}
+        {disableScroll ? (
+          <View style={[styles.view, style]}>{children}</View>
+        ) : (
+          <ScrollView
+            contentContainerStyle={{ flexGrow: 1 }}
+            keyboardShouldPersistTaps="handled">
+            <View style={[styles.view, style]}>{children}</View>
+          </ScrollView>
+        )}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

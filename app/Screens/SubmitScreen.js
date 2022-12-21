@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import * as Yup from "yup";
+import { AuthContext } from "../auth/context";
+import ActivityIndicator from "../components/ActivityIndicator";
 
 import { AppForm as Form, AppFormField as FormField } from "../components/form";
 import SubmitButton from "../components/form/SubmitButton";
@@ -9,45 +11,58 @@ import Screen from "../components/Screen";
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().min(1).label("Name"),
   email: Yup.string().required().email().label("Email"),
+  subject: Yup.string().label("Subject"),
   message: Yup.string().required().min(1).label("Message"),
 });
 
 function SubmitScreen() {
-  const handleSubmit = ({ name, email, message }) => {
-    console.log(name, email, message);
+  const { currentUser, loading } = useContext(AuthContext);
+  const handleSubmit = (data) => {
+    console.log(data);
   };
 
   return (
-    <Screen style={styles.container}>
-      <Form
-        inititalValues={{ name: "", email: "", message: "" }}
-        onSubmit={handleSubmit}
-        validationSchema={validationSchema}>
-        <FormField
-          autoCapitalize="words"
-          autoCorrect={false}
-          name="name"
-          placeholder="Name"
-          textContentType="name"
-        />
-        <FormField
-          autoCapitalize="none"
-          autoCorrect={false}
-          keyboardType="email-address"
-          name="email"
-          placeholder="Email"
-          textContentType="emailAddress"
-        />
-        <FormField
-          name="message"
-          placeholder="Message"
-          multiline
-          numberOfLines={3}
-          style={{ height: 200 }}
-        />
-        <SubmitButton title="Send" />
-      </Form>
-    </Screen>
+    <>
+      <ActivityIndicator visible={loading} />
+      <Screen style={styles.container}>
+        {!loading && (
+          <Form
+            inititalValues={{
+              name: `${currentUser.displayName}`,
+              email: `${currentUser.email}`,
+              subject: "",
+              message: "",
+            }}
+            onSubmit={handleSubmit}
+            validationSchema={validationSchema}>
+            <FormField
+              autoCapitalize="words"
+              autoCorrect={false}
+              name="name"
+              placeholder="Name"
+              textContentType="name"
+            />
+            <FormField
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardType="email-address"
+              name="email"
+              placeholder="Email"
+              textContentType="emailAddress"
+            />
+            <FormField name="subject" placeholder="Subject" />
+            <FormField
+              name="message"
+              placeholder="Message"
+              multiline
+              numberOfLines={3}
+              style={{ height: 200 }}
+            />
+            <SubmitButton title="Send" />
+          </Form>
+        )}
+      </Screen>
+    </>
   );
 }
 
