@@ -46,7 +46,6 @@ function SignUpScreen() {
           <FormField
             autoCapitalize="words"
             autoCorrect={false}
-            keyboardType="email-address"
             name="name"
             placeholder="Name"
             textContentType="name"

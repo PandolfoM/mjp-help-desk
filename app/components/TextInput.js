@@ -4,12 +4,12 @@ import colors from "../config/colors";
 
 import defaultStyles from "../config/styles";
 
-function AppTextInput({ icon, ...otherProps }) {
+function AppTextInput({ style, ...otherProps }) {
   return (
-    <View style={[styles.container]}>
+    <View style={styles.container}>
       <TextInput
         placeholderTextColor={colors.medium}
-        style={defaultStyles.textInput}
+        style={[defaultStyles.textInput, style]}
         {...otherProps}
       />
     </View>

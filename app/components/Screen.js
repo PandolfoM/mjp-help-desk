@@ -14,7 +14,11 @@ function Screen({ children, style }) {
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1 }}>
-        <View style={[styles.view, style]}>{children}</View>
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          keyboardShouldPersistTaps="handled">
+          <View style={[styles.view, style]}>{children}</View>
+        </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
