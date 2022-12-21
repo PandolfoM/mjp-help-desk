@@ -2,6 +2,7 @@ import React from "react";
 import { View, StyleSheet, FlatList } from "react-native";
 import ItemSeparator from "../components/ItemSeparator";
 import ListItem from "../components/ListItem";
+import dayjs from "dayjs";
 
 import Screen from "../components/Screen";
 import AppText from "../components/Text";
@@ -41,9 +42,9 @@ function MessagesScreen() {
           renderItem={({ item }) => (
             <ListItem
               title={item.title}
-              subtitle={item.date}
+              subtitle={dayjs(item.date).format("MM/DD/YY h:mm A")}
               clickable
-              onPress={() => console.log(item.title)}
+              onPress={() => console.log(item)}
             />
           )}
         />
