@@ -4,7 +4,7 @@ import { View, StyleSheet, ImageBackground, Image } from "react-native";
 import Button from "../components/Button";
 import Text from "../components/Text";
 
-function WelcomeScreen(props) {
+function WelcomeScreen({ navigation }) {
   return (
     <ImageBackground
       blurRadius={10}
@@ -15,11 +15,11 @@ function WelcomeScreen(props) {
         <Text style={styles.text}>MJP Systems</Text>
       </View>
       <View style={styles.buttonContainer}>
-        <Button title="Login" onPress={() => console.log("Login Pressed")} />
+        <Button title="Login" onPress={() => navigation.navigate("Login")} />
         <Button
           title="Sign Up"
           color="secondary"
-          onPress={() => console.log("Sign Up Pressed")}
+          onPress={() => navigation.navigate("SignUp")}
         />
       </View>
     </ImageBackground>
