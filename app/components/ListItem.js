@@ -3,7 +3,7 @@ import { View, StyleSheet, TouchableHighlight, Image } from "react-native";
 import colors from "../config/colors";
 import Text from "./Text";
 
-function List({ title, subtitle, IconComponent, image, onPress }) {
+function ListItem({ title, subtitle, IconComponent, image, onPress }) {
   return (
     <TouchableHighlight underlayColor={colors.light} onPress={onPress}>
       <View style={styles.container}>
@@ -49,4 +49,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default List;
+export default ListItem;

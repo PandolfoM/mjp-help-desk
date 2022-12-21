@@ -3,7 +3,7 @@ import { FlatList, StyleSheet, View } from "react-native";
 import { auth } from "../../firebaseConfig";
 import { AuthContext } from "../auth/context";
 import Icon from "../components/Icon";
-import List from "../components/List";
+import ListItem from "../components/ListItem";
 import Screen from "../components/Screen";
 import colors from "../config/colors";
 
@@ -23,7 +23,7 @@ function AccountScreen() {
   return (
     <Screen style={styles.screen}>
       <View style={styles.container}>
-        <List
+        <ListItem
           title={currentUser.displayName}
           subtitle={currentUser.email}
           image={require("../assets/matt.png")}
@@ -34,7 +34,7 @@ function AccountScreen() {
           data={items}
           keyExtractor={(item) => item.title}
           renderItem={({ item }) => (
-            <List
+            <ListItem
               title={item.title}
               IconComponent={
                 <Icon
