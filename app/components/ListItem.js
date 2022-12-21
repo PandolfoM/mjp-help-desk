@@ -1,11 +1,20 @@
 import React from "react";
 import { View, StyleSheet, TouchableHighlight, Image } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+
 import colors from "../config/colors";
 import Text from "./Text";
 
-function ListItem({ title, subtitle, IconComponent, image, onPress }) {
+function ListItem({
+  title,
+  subtitle,
+  IconComponent,
+  image,
+  onPress,
+  clickable,
+}) {
   return (
-    <TouchableHighlight underlayColor={colors.light} onPress={onPress}>
+    <TouchableHighlight underlayColor={colors.dark} onPress={onPress}>
       <View style={styles.container}>
         {IconComponent}
         {image && <Image style={styles.image} source={image} />}
@@ -19,6 +28,13 @@ function ListItem({ title, subtitle, IconComponent, image, onPress }) {
             </Text>
           )}
         </View>
+        {clickable && (
+          <MaterialCommunityIcons
+            name="chevron-right"
+            size={25}
+            color={colors.dark}
+          />
+        )}
       </View>
     </TouchableHighlight>
   );
@@ -45,6 +61,7 @@ const styles = StyleSheet.create({
     color: colors.medium,
   },
   title: {
+    color: colors.dark,
     fontWeight: "500",
   },
 });
