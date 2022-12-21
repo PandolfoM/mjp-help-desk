@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
-import { Keyboard, ScrollView, StyleSheet } from "react-native";
+import React from "react";
+import { StyleSheet } from "react-native";
 import * as Yup from "yup";
-import { auth } from "../../firebaseConfig";
 
 import { AppForm as Form, AppFormField as FormField } from "../components/form";
 import SubmitButton from "../components/form/SubmitButton";
@@ -10,10 +9,10 @@ import Screen from "../components/Screen";
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().min(1).label("Name"),
   email: Yup.string().required().email().label("Email"),
-  message: Yup.string().required().min(10).label("Message"),
+  message: Yup.string().required().min(1).label("Message"),
 });
 
-function SubmitScreen(props) {
+function SubmitScreen() {
   const handleSubmit = ({ name, email, message }) => {
     console.log(name, email, message);
   };
