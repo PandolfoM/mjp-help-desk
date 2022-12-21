@@ -19,7 +19,7 @@ function AppTextInput({ style, ...otherProps }) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.light,
-    borderRadius: 50,
+    borderRadius: 30,
     flexDirection: "row",
     marginVertical: 10,
     overflow: "hidden",

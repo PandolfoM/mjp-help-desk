@@ -43,7 +43,7 @@ function SubmitScreen() {
           placeholder="Message"
           multiline
           numberOfLines={3}
-          style={{ maxHeight: 200 }}
+          style={{ height: 200 }}
         />
         <SubmitButton title="Send" />
       </Form>
