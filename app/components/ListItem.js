@@ -12,10 +12,11 @@ function ListItem({
   image,
   onPress,
   clickable,
+  style,
 }) {
   return (
     <TouchableHighlight underlayColor={colors.dark} onPress={onPress}>
-      <View style={styles.container}>
+      <View style={[styles.container, style]}>
         {IconComponent}
         {image && <Image style={styles.image} source={image} />}
         <View style={styles.detailsContainer}>
@@ -23,7 +24,10 @@ function ListItem({
             {title}
           </Text>
           {subtitle && (
-            <Text style={styles.subtitle} numberOfLines={2}>
+            <Text
+              style={styles.subtitle}
+              numberOfLines={1}
+              adjustsFontSizeToFit>
               {subtitle}
             </Text>
           )}
@@ -53,8 +57,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   image: {
-    width: 70,
-    height: 70,
+    width: 60,
+    height: 60,
     borderRadius: 35,
   },
   subtitle: {

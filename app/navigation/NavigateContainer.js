@@ -5,7 +5,6 @@ import AuthNavigator from "./AuthNavigator";
 import { AuthContext } from "../auth/context";
 import navigationTheme from "./navigationTheme";
 import { navigationRef } from "./rootNavigation";
-import SubmitScreen from "../Screens/SubmitScreen";
 import AppNavigator from "./AppNavigator";
 
 function NavigateContainer() {

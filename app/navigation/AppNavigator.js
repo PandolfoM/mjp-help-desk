@@ -1,18 +1,34 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import React from "react";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import React, { useContext } from "react";
 
 import MessagesScreen from "../Screens/MessagesScreen";
 import SubmitScreen from "../Screens/SubmitScreen";
 import Icon from "../components/Icon";
 import colors from "../config/colors";
+import Header from "../components/Header";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { Button, Image, View } from "react-native";
+import Screen from "../components/Screen";
+import ListItem from "../components/ListItem";
+import { AuthContext } from "../auth/context";
+import DrawerItems from "../Screens/DrawerItems";
 
 const Tab = createBottomTabNavigator();
+const Drawer = createDrawerNavigator();
 
-function AppNavigator() {
+function TabRoutes({ navigation }) {
   return (
     <Tab.Navigator
-      screenOptions={{ headerShown: false, tabBarShowLabel: false }}>
+      initialRouteName="Submit"
+      screenOptions={{
+        tabBarShowLabel: false,
+        headerRight: () => (
+          <Header
+            image={require("../assets/matt.png")}
+            onPress={navigation.toggleDrawer}
+          />
+        ),
+      }}>
       <Tab.Screen
         options={{
           tabBarIcon: ({ focused }) => (
@@ -29,11 +45,11 @@ function AppNavigator() {
       />
       <Tab.Screen
         options={{
-          tabBarIcon: () => (
+          tabBarIcon: ({ focused }) => (
             <Icon
               iconColor={colors.secondary}
               backgroundColor="transparent"
-              name="message"
+              name={focused ? "message" : "message-outline"}
               size={50}
             />
           ),
@@ -42,6 +58,20 @@ function AppNavigator() {
         component={MessagesScreen}
       />
     </Tab.Navigator>
+  );
+}
+
+function AppNavigator() {
+  return (
+    <Drawer.Navigator
+      drawerContent={(props) => <DrawerItems {...props} />}
+      screenOptions={() => ({
+        headerShown: false,
+        headerLeft: () => null,
+        drawerPosition: "right",
+      })}>
+      <Drawer.Screen component={TabRoutes} name="Home" />
+    </Drawer.Navigator>
   );
 }
 
