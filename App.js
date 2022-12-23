@@ -15,7 +15,6 @@ export default function App() {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) setIsReady(true);
-      console.log(user);
     });
   }, []);
 
