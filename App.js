@@ -13,8 +13,8 @@ export default function App() {
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) setIsReady(true);
+    onAuthStateChanged(auth, () => {
+      setIsReady(true);
     });
   }, []);
 
