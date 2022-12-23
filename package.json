@@ -17,6 +17,7 @@
     "dayjs": "^1.11.7",
     "expo": "~47.0.8",
     "expo-constants": "~14.0.2",
+    "expo-splash-screen": "~0.17.5",
     "expo-status-bar": "~1.4.2",
     "firebase": "^9.15.0",
     "formik": "^2.2.9",
