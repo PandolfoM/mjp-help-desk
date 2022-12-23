@@ -1,8 +1,6 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
 import React from "react";
 import { StyleSheet, Image, View } from "react-native";
 import * as Yup from "yup";
-import { auth } from "../../firebaseConfig";
 import useAuth from "../auth/useAuth";
 
 import { AppForm as Form, AppFormField as FormField } from "../components/form";

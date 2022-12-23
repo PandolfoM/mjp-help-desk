@@ -1,5 +1,4 @@
 import React from "react";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { StyleSheet, Image, View } from "react-native";
 import * as Yup from "yup";
 
@@ -7,7 +6,6 @@ import { AppForm as Form, AppFormField as FormField } from "../components/form";
 import SubmitButton from "../components/form/SubmitButton";
 import Screen from "../components/Screen";
 import Text from "../components/Text";
-import { auth } from "../../firebaseConfig";
 import colors from "../config/colors";
 import useAuth from "../auth/useAuth";
 
