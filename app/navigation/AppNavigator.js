@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import React, { useContext } from "react";
+import React from "react";
 
 import MessagesScreen from "../Screens/MessagesScreen";
 import SubmitScreen from "../Screens/SubmitScreen";
@@ -7,10 +7,6 @@ import Icon from "../components/Icon";
 import colors from "../config/colors";
 import Header from "../components/Header";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { Button, Image, View } from "react-native";
-import Screen from "../components/Screen";
-import ListItem from "../components/ListItem";
-import { AuthContext } from "../auth/context";
 import DrawerItems from "../Screens/DrawerItems";
 
 const Tab = createBottomTabNavigator();
@@ -21,7 +17,6 @@ function TabRoutes({ navigation }) {
     <Tab.Navigator
       initialRouteName="Submit"
       screenOptions={{
-        tabBarShowLabel: false,
         headerRight: () => (
           <Header
             image={require("../assets/matt.png")}
@@ -31,6 +26,7 @@ function TabRoutes({ navigation }) {
       }}>
       <Tab.Screen
         options={{
+          headerTitle: "MJP Systems",
           tabBarIcon: ({ focused }) => (
             <Icon
               iconColor={colors.primary}

@@ -9,6 +9,7 @@ import Screen from "../components/Screen";
 import Text from "../components/Text";
 import { auth } from "../../firebaseConfig";
 import colors from "../config/colors";
+import useAuth from "../auth/useAuth";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().min(1).label("Name"),
@@ -17,19 +18,10 @@ const validationSchema = Yup.object().shape({
 });
 
 function SignUpScreen() {
+  const { signUp } = useAuth();
+
   const handleSubmit = async ({ name, email, password }) => {
-    try {
-      const res = await createUserWithEmailAndPassword(auth, email, password);
-      try {
-        await updateProfile(res.user, {
-          displayName: name,
-        });
-      } catch (e) {
-        console.error(e);
-      }
-    } catch (e) {
-      console.error(e);
-    }
+    signUp({ name, email, password });
   };
 
   return (

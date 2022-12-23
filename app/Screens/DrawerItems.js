@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { View, StyleSheet, FlatList } from "react-native";
 import { AuthContext } from "../auth/context";
+import useAuth from "../auth/useAuth";
 import Icon from "../components/Icon";
 import ListItem from "../components/ListItem";
 import Screen from "../components/Screen";
@@ -8,10 +9,11 @@ import colors from "../config/colors";
 
 function DrawerItems({ navigation }) {
   const { currentUser } = useContext(AuthContext);
+  const { logOut } = useAuth();
 
   return (
     <Screen disableScroll style={styles.screen}>
-      <View style={styles.container}>
+      <View>
         <ListItem
           title={currentUser.displayName}
           subtitle={currentUser.email}
@@ -22,7 +24,7 @@ function DrawerItems({ navigation }) {
         <ListItem
           title="Logout"
           clickable
-          onPress={() => console.log("logged out")}
+          onPress={() => logOut()}
           IconComponent={
             <Icon name="logout" backgroundColor={colors.primary} />
           }
@@ -33,7 +35,6 @@ function DrawerItems({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {},
   screen: {
     backgroundColor: colors.light,
     justifyContent: "space-between",

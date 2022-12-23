@@ -16,16 +16,16 @@ const validationSchema = Yup.object().shape({
 });
 
 function SubmitScreen() {
-  const { currentUser, loading } = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
   const handleSubmit = (data) => {
     console.log(data);
   };
 
   return (
     <>
-      <ActivityIndicator visible={loading} />
+      <ActivityIndicator visible={!currentUser} />
       <Screen style={styles.container}>
-        {!loading && (
+        {currentUser && (
           <Form
             inititalValues={{
               name: `${currentUser.displayName}`,

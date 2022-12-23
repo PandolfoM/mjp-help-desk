@@ -3,6 +3,7 @@ import React from "react";
 import { StyleSheet, Image, View } from "react-native";
 import * as Yup from "yup";
 import { auth } from "../../firebaseConfig";
+import useAuth from "../auth/useAuth";
 
 import { AppForm as Form, AppFormField as FormField } from "../components/form";
 import SubmitButton from "../components/form/SubmitButton";
@@ -16,16 +17,10 @@ const validationSchema = Yup.object().shape({
 });
 
 function LoginScreen() {
+  const { signIn } = useAuth();
+
   const handleSubmit = async ({ email, password }) => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log(user);
-      })
-      .catch((e) => {
-        const errorCode = e.code;
-        const errorMessage = e.message;
-      });
+    signIn({ email, password });
   };
 
   return (
