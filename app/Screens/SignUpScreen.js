@@ -18,8 +18,8 @@ const validationSchema = Yup.object().shape({
 function SignUpScreen() {
   const { signUp } = useAuth();
 
-  const handleSubmit = async ({ name, email, password }) => {
-    signUp({ name, email, password });
+  const handleSubmit = async (values) => {
+    signUp(values);
   };
 
   return (

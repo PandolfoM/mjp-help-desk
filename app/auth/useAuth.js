@@ -5,8 +5,9 @@ import {
   updateProfile,
 } from "firebase/auth/react-native";
 import { useContext } from "react";
-import { auth } from "../../firebaseConfig";
+import { auth, db } from "../../firebaseConfig";
 import { AuthContext } from "./context";
+import { doc, setDoc } from "firebase/firestore";
 
 export default useAuth = () => {
   const { setCurrentUser } = useContext(AuthContext);
@@ -29,6 +30,14 @@ export default useAuth = () => {
         await updateProfile(res.user, {
           displayName: name,
         });
+
+        await setDoc(doc(db, "users", res.user.uid), {
+          uid: res.user.uid,
+          displayName: name,
+          email,
+        });
+
+        await setDoc(doc(db, "userMessages", res.user.uid), {});
       } catch (e) {
         console.error(e);
       }
