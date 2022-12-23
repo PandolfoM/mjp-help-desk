@@ -1,9 +1,10 @@
 import React from "react";
 import { StyleSheet, Image, TouchableOpacity } from "react-native";
 
-function Header({ onPress, image }) {
+function Header({ onPress, image, IconComponent }) {
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={0.8}>
+      {IconComponent}
       {image && <Image style={styles.image} source={image} />}
     </TouchableOpacity>
   );

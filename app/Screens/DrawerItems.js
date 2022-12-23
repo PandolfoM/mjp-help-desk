@@ -7,9 +7,10 @@ import ListItem from "../components/ListItem";
 import Screen from "../components/Screen";
 import colors from "../config/colors";
 
-function DrawerItems({ navigation }) {
+function DrawerItems() {
   const { currentUser } = useContext(AuthContext);
   const { logOut } = useAuth();
+  const photo = currentUser.photoURL;
 
   return (
     <Screen disableScroll style={styles.screen}>
@@ -17,7 +18,18 @@ function DrawerItems({ navigation }) {
         <ListItem
           title={currentUser.displayName}
           subtitle={currentUser.email}
-          image={require("../assets/matt.png")}
+          image={photo && photo}
+          IconComponent={
+            !photo && (
+              <Icon
+                sizeMultiplier={1}
+                iconColor={colors.dark}
+                backgroundColor="transparent"
+                name="account-circle"
+                size={60}
+              />
+            )
+          }
         />
       </View>
       <View style={styles.bottom}>
