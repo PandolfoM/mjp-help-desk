@@ -13,6 +13,7 @@ function Screen({ children, style, disableScroll }) {
     <SafeAreaView style={[styles.screen, style]}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={100}
         style={{ flex: 1 }}>
         {disableScroll ? (
           <View style={[styles.view, style]}>{children}</View>
