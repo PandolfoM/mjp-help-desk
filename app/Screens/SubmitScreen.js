@@ -1,9 +1,12 @@
+import * as Yup from "yup";
+import { doc, onSnapshot } from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
-import * as Yup from "yup";
+
 import { AuthContext } from "../auth/context";
-import useNotifications from "../auth/useNotifications";
 import ActivityIndicator from "../components/ActivityIndicator";
+import { db } from "../../firebaseConfig";
+import useNotifications from "../auth/useNotifications";
 
 import { AppForm as Form, AppFormField as FormField } from "../components/form";
 import SubmitButton from "../components/form/SubmitButton";
@@ -17,12 +20,35 @@ const validationSchema = Yup.object().shape({
 });
 
 function SubmitScreen() {
+  const [token, setToken] = useState("");
   const { currentUser } = useContext(AuthContext);
-  const { sendEmail } = useNotifications();
+  const { sendEmail, sendPushNotification } = useNotifications();
+
+  useEffect(() => {
+    const getToken = () => {
+      const unsub = onSnapshot(
+        doc(db, "users", "SPbUvmOmy4UoNyso7rXgINB8Il02"),
+        (doc) => {
+          setToken(doc.data().notificationToken);
+        }
+      );
+
+      return () => {
+        unsub();
+      };
+    };
+
+    currentUser.uid && getToken();
+  }, [currentUser.uid]);
 
   const handleSubmit = (data) => {
-    // console.log(data);
     sendEmail(data);
+    sendPushNotification({
+      title: "New Message",
+      body: data.name + " has sent you a message",
+      subject: data.subject ? data.subject : "",
+      token: token,
+    });
   };
 
   return (

@@ -28,6 +28,9 @@
     "web": {
       "favicon": "./app/assets/favicon.png"
     },
+    "notification": {
+      "iosDisplayInForeground": true
+    },
     "extra": {
       "eas": {
         "projectId": "b1415ab9-24fe-4580-8bb3-d2772a575011"
