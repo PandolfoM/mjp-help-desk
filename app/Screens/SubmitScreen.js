@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import * as Yup from "yup";
 import { AuthContext } from "../auth/context";
+import useNotifications from "../auth/useNotifications";
 import ActivityIndicator from "../components/ActivityIndicator";
 
 import { AppForm as Form, AppFormField as FormField } from "../components/form";
@@ -17,8 +18,11 @@ const validationSchema = Yup.object().shape({
 
 function SubmitScreen() {
   const { currentUser } = useContext(AuthContext);
+  const { sendEmail } = useNotifications();
+
   const handleSubmit = (data) => {
-    console.log(data);
+    // console.log(data);
+    sendEmail(data);
   };
 
   return (
