@@ -1,5 +1,13 @@
 import * as Yup from "yup";
-import { doc, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 
@@ -19,29 +27,41 @@ const validationSchema = Yup.object().shape({
 });
 
 function SubmitScreen() {
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState([]);
   const { currentUser } = useContext(AuthContext);
   const { sendEmail, sendPushNotification } = useNotifications();
 
   useEffect(() => {
-    const getToken = () => {
-      const unsub = onSnapshot(
-        doc(db, "users", "SPbUvmOmy4UoNyso7rXgINB8Il02"),
-        (doc) => {
-          setToken(doc.data().notificationToken);
-        }
-      );
+    const getToken = async () => {
+      const q = query(collection(db, "users"), where("admin", "==", true));
+
+      try {
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          setToken((current) => [...current, doc.data().notificationToken]);
+        });
+      } catch (err) {
+        setErr(err);
+      }
+      // const unsub = onSnapshot(
+      //   doc(db, "users", "SmYa6LiJGeQKMFN3Zmm56hdv2m13"),
+      //   (doc) => {
+      //     setToken(doc.data().notificationToken);
+      //     console.log(doc.data().notificationToken);
+      //   }
+      // );
 
       return () => {
         unsub();
       };
     };
 
-    currentUser.notificationToken && getToken();
-  }, [currentUser.notificationToken]);
+    getToken();
+  }, []);
 
+  // console.log(token);
   const handleSubmit = (data) => {
-    sendEmail(data);
+    // sendEmail(data);
     sendPushNotification({
       title: "New Message",
       body: data.name + " has sent you a message",

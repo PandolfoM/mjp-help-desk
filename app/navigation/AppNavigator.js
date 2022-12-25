@@ -59,7 +59,7 @@ function TabRoutes({ navigation }) {
       />
       <Tab.Screen
         options={{
-          tabBarBadge: 4,
+          tabBarBadge: null,
           tabBarIcon: ({ focused }) => (
             <Icon
               iconColor={colors.secondary}

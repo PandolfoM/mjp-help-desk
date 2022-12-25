@@ -71,6 +71,7 @@ export default useNotifications = (notificationListener) => {
           subject: subject,
           message: message,
           date: Timestamp.now().seconds,
+          read: false,
         }),
       });
     } catch (e) {
@@ -79,18 +80,20 @@ export default useNotifications = (notificationListener) => {
   };
 
   const sendPushNotification = ({ token, title, body, subject }) => {
-    return fetch("https://exp.host/--/api/v2/push/send", {
-      body: JSON.stringify({
-        to: token,
-        title: title,
-        subtitle: subject,
-        body: body,
-        sound: "default",
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
+    token.forEach((t) => {
+      fetch("https://exp.host/--/api/v2/push/send", {
+        body: JSON.stringify({
+          to: t,
+          title: title,
+          subtitle: subject,
+          body: body,
+          sound: "default",
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+      });
     });
   };
 
