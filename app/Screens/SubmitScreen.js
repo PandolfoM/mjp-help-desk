@@ -1,13 +1,5 @@
 import * as Yup from "yup";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  onSnapshot,
-  query,
-  where,
-} from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 

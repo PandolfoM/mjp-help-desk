@@ -12,7 +12,7 @@ import AppText from "../components/Text";
 import colors from "../config/colors";
 import ActivityIndicator from "../components/ActivityIndicator";
 
-function MessagesScreen() {
+function MessagesScreen({ navigation }) {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const { currentUser } = useContext(AuthContext);
@@ -55,7 +55,7 @@ function MessagesScreen() {
                 "MM/DD/YYYY, h:mm:ss A"
               )}
               clickable
-              onPress={() => console.log(item)}
+              onPress={() => navigation.navigate("MessageDetails", item)}
             />
           )}
         />

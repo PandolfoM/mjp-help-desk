@@ -81,19 +81,23 @@ export default useNotifications = (notificationListener) => {
 
   const sendPushNotification = ({ token, title, body, subject }) => {
     token.forEach((t) => {
-      fetch("https://exp.host/--/api/v2/push/send", {
-        body: JSON.stringify({
-          to: t,
-          title: title,
-          subtitle: subject,
-          body: body,
-          sound: "default",
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-      });
+      try {
+        fetch("https://exp.host/--/api/v2/push/send", {
+          body: JSON.stringify({
+            to: t,
+            title: title,
+            subtitle: subject,
+            body: body,
+            sound: "default",
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+        });
+      } catch (e) {
+        console.log(e);
+      }
     });
   };
 

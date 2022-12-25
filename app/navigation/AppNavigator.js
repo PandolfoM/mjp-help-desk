@@ -9,6 +9,7 @@ import Header from "../components/Header";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import DrawerItems from "../Screens/DrawerItems";
 import { AuthContext } from "../auth/context";
+import MessagesNavigator from "./MessagesNavigator";
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -60,6 +61,7 @@ function TabRoutes({ navigation }) {
       <Tab.Screen
         options={{
           tabBarBadge: null,
+          headerTitle: "Messages",
           tabBarIcon: ({ focused }) => (
             <Icon
               iconColor={colors.secondary}
@@ -69,8 +71,8 @@ function TabRoutes({ navigation }) {
             />
           ),
         }}
-        name="Messages"
-        component={MessagesScreen}
+        name="MessageFeed"
+        component={MessagesNavigator}
       />
     </Tab.Navigator>
   );
