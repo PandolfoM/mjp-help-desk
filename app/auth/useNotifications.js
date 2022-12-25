@@ -1,7 +1,16 @@
-import { useContext, useEffect } from "react";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
-import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
+import { useContext, useEffect } from "react";
+import {
+  addDoc,
+  arrayUnion,
+  collection,
+  doc,
+  Timestamp,
+  updateDoc,
+} from "firebase/firestore";
+import uuid from "react-native-uuid";
+
 import { db } from "../../firebaseConfig";
 import { AuthContext } from "./context";
 
@@ -52,6 +61,17 @@ export default useNotifications = (notificationListener) => {
             <p>Message: ${message}</p>
           `,
         },
+      });
+
+      await updateDoc(doc(db, "userMessages", currentUser.uid), {
+        messages: arrayUnion({
+          id: uuid.v4(),
+          name: name,
+          email: email,
+          subject: subject,
+          message: message,
+          date: Timestamp.now().seconds,
+        }),
       });
     } catch (e) {
       console.log(e);

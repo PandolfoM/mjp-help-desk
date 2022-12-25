@@ -1,37 +1,35 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, StyleSheet, FlatList } from "react-native";
+import { doc, onSnapshot } from "firebase/firestore";
+import dayjs from "dayjs";
 import ItemSeparator from "../components/ItemSeparator";
 import ListItem from "../components/ListItem";
-import dayjs from "dayjs";
 
+import { db } from "../../firebaseConfig";
+import { AuthContext } from "../auth/context";
 import Screen from "../components/Screen";
 import AppText from "../components/Text";
 import colors from "../config/colors";
 
-const messages = [
-  {
-    id: 1,
-    title: "Message 1",
-    date: Date.now(),
-  },
-  {
-    id: 2,
-    title: "Message 2",
-    date: Date.now(),
-  },
-  {
-    id: 3,
-    title: "Message 3",
-    date: Date.now(),
-  },
-  {
-    id: 4,
-    title: "Message 4",
-    date: Date.now(),
-  },
-];
-
 function MessagesScreen() {
+  const [messages, setMessages] = useState([]);
+  const { currentUser } = useContext(AuthContext);
+
+  useEffect(() => {
+    const getMessages = () => {
+      const unsub = onSnapshot(
+        doc(db, "userMessages", currentUser.uid),
+        (doc) => {
+          doc.data() ? setMessages(doc.data().messages) : setMessages([]);
+        }
+      );
+
+      return () => unsub();
+    };
+
+    currentUser.uid && getMessages();
+  }, [currentUser.uid]);
+
   return (
     <Screen style={styles.screen} disableScroll>
       {messages.length > 0 ? (
@@ -41,8 +39,10 @@ function MessagesScreen() {
           ItemSeparatorComponent={ItemSeparator}
           renderItem={({ item }) => (
             <ListItem
-              title={item.title}
-              subtitle={dayjs(item.date).format("MM/DD/YY h:mm A")}
+              title={item.subject}
+              subtitle={dayjs(new Date(item.date * 1000)).format(
+                "MM/DD/YYYY, h:mm:ss A"
+              )}
               clickable
               onPress={() => console.log(item)}
             />

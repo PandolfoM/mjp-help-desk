@@ -7,7 +7,6 @@ import { AuthContext } from "../auth/context";
 import ActivityIndicator from "../components/ActivityIndicator";
 import { db } from "../../firebaseConfig";
 import useNotifications from "../auth/useNotifications";
-
 import { AppForm as Form, AppFormField as FormField } from "../components/form";
 import SubmitButton from "../components/form/SubmitButton";
 import Screen from "../components/Screen";
@@ -38,8 +37,8 @@ function SubmitScreen() {
       };
     };
 
-    currentUser.uid && getToken();
-  }, [currentUser.uid]);
+    currentUser.notificationToken && getToken();
+  }, [currentUser.notificationToken]);
 
   const handleSubmit = (data) => {
     sendEmail(data);
