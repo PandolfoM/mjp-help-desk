@@ -43,13 +43,6 @@ function SubmitScreen() {
       } catch (err) {
         setErr(err);
       }
-      // const unsub = onSnapshot(
-      //   doc(db, "users", "SmYa6LiJGeQKMFN3Zmm56hdv2m13"),
-      //   (doc) => {
-      //     setToken(doc.data().notificationToken);
-      //     console.log(doc.data().notificationToken);
-      //   }
-      // );
 
       return () => {
         unsub();
