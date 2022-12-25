@@ -46,9 +46,9 @@ function TabRoutes({ navigation }) {
       <Tab.Screen
         options={{
           headerTitle: "MJP Systems",
-          tabBarIcon: ({ focused }) => (
+          tabBarIcon: ({ focused, color }) => (
             <Icon
-              iconColor={colors.primary}
+              iconColor={color}
               backgroundColor="transparent"
               name={focused ? "send" : "send-outline"}
               size={55}
@@ -62,9 +62,9 @@ function TabRoutes({ navigation }) {
         options={{
           tabBarBadge: null,
           headerTitle: "Messages",
-          tabBarIcon: ({ focused }) => (
+          tabBarIcon: ({ focused, color }) => (
             <Icon
-              iconColor={colors.secondary}
+              iconColor={color}
               backgroundColor="transparent"
               name={focused ? "message" : "message-outline"}
               size={55}
