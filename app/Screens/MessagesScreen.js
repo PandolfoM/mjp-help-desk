@@ -10,9 +10,11 @@ import { AuthContext } from "../auth/context";
 import Screen from "../components/Screen";
 import AppText from "../components/Text";
 import colors from "../config/colors";
+import ActivityIndicator from "../components/ActivityIndicator";
 
 function MessagesScreen() {
   const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
@@ -20,7 +22,10 @@ function MessagesScreen() {
       const unsub = onSnapshot(
         doc(db, "userMessages", currentUser.uid),
         (doc) => {
-          doc.data() ? setMessages(doc.data().messages) : setMessages([]);
+          if (doc.data) {
+            setMessages(doc.data().messages);
+          }
+          setLoading(false);
         }
       );
 
@@ -32,7 +37,13 @@ function MessagesScreen() {
 
   return (
     <Screen style={styles.screen} disableScroll>
-      {messages.length > 0 ? (
+      <ActivityIndicator visible={loading} />
+      {!messages && !loading && (
+        <View style={styles.noMessages}>
+          <AppText style={styles.text}>No Messages</AppText>
+        </View>
+      )}
+      {messages && !loading && (
         <FlatList
           data={messages}
           keyExtractor={(item) => item.id}
@@ -48,10 +59,6 @@ function MessagesScreen() {
             />
           )}
         />
-      ) : (
-        <View style={styles.noMessages}>
-          <AppText style={styles.text}>No Messages</AppText>
-        </View>
       )}
     </Screen>
   );
