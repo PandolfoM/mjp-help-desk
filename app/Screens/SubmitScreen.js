@@ -52,9 +52,8 @@ function SubmitScreen() {
     getToken();
   }, []);
 
-  // console.log(token);
   const handleSubmit = (data) => {
-    // sendEmail(data);
+    sendEmail(data);
     sendPushNotification({
       title: "New Message",
       body: data.name + " has sent you a message",
