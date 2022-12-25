@@ -10,6 +10,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import DrawerItems from "../Screens/DrawerItems";
 import { AuthContext } from "../auth/context";
 import MessagesNavigator from "./MessagesNavigator";
+import DashboardNavigator from "./DashboardNavigator";
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -88,6 +89,7 @@ function AppNavigator() {
         drawerPosition: "right",
       })}>
       <Drawer.Screen component={TabRoutes} name="Home" />
+      <Drawer.Screen component={DashboardNavigator} name="Dashboard" />
     </Drawer.Navigator>
   );
 }
