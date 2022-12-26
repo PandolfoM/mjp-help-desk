@@ -1,11 +1,11 @@
 import "react-native-gesture-handler";
 import * as SplashScreen from "expo-splash-screen";
 
-import { AuthContextProvider } from "./app/auth/context";
-import NavigateContainer from "./app/navigation/NavigateContainer";
-import { useEffect, useState } from "react";
 import { auth } from "./firebaseConfig";
+import { AuthContextProvider } from "./app/auth/context";
+import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth/react-native";
+import NavigateContainer from "./app/navigation/NavigateContainer";
 
 SplashScreen.preventAutoHideAsync();
 

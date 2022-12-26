@@ -1,23 +1,22 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import React, { useContext } from "react";
 
-import MessagesScreen from "../Screens/MessagesScreen";
-import SubmitScreen from "../Screens/SubmitScreen";
-import Icon from "../components/Icon";
-import colors from "../config/colors";
-import Header from "../components/Header";
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import DrawerItems from "../Screens/DrawerItems";
 import { AuthContext } from "../auth/context";
-import MessagesNavigator from "./MessagesNavigator";
+import colors from "../config/colors";
 import DashboardNavigator from "./DashboardNavigator";
+import DrawerItems from "../Screens/DrawerItems";
+import Header from "../components/Header";
+import Icon from "../components/Icon";
+import MessagesNavigator from "./MessagesNavigator";
+import SubmitScreen from "../Screens/SubmitScreen";
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
 function TabRoutes({ navigation }) {
   useNotifications();
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, isAdmin } = useContext(AuthContext);
   const photo = currentUser.photoURL;
 
   return (

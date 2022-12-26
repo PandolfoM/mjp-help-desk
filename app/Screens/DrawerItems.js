@@ -1,7 +1,6 @@
-import { doc, getDoc, onSnapshot } from "firebase/firestore";
-import React, { useContext, useEffect, useState } from "react";
-import { View, StyleSheet, FlatList } from "react-native";
-import { db } from "../../firebaseConfig";
+import React, { useContext } from "react";
+import { View, StyleSheet } from "react-native";
+
 import { AuthContext } from "../auth/context";
 import useAuth from "../auth/useAuth";
 import Icon from "../components/Icon";
@@ -10,24 +9,9 @@ import Screen from "../components/Screen";
 import colors from "../config/colors";
 
 function DrawerItems({ navigation }) {
-  const [isAdmin, setIsAdmin] = useState(false);
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, isAdmin } = useContext(AuthContext);
   const { logOut } = useAuth();
   const photo = currentUser.photoURL;
-
-  useEffect(() => {
-    const getUser = async () => {
-      const unsub = onSnapshot(doc(db, "users", currentUser.uid), (doc) => {
-        if (doc.data) {
-          setIsAdmin(doc.data().admin);
-        }
-      });
-
-      return () => unsub();
-    };
-
-    currentUser.uid && getUser();
-  }, [currentUser.uid]);
 
   return (
     <Screen disableScroll style={styles.screen}>
@@ -81,12 +65,15 @@ function DrawerItems({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  bottom: {
+    flex: 1,
+    justifyContent: "flex-end",
+  },
   profile: {
     marginBottom: 5,
   },
   screen: {
     backgroundColor: colors.light,
-    justifyContent: "space-between",
   },
 });
 

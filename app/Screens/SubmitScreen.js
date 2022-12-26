@@ -1,13 +1,13 @@
 import * as Yup from "yup";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
 
-import { AuthContext } from "../auth/context";
-import ActivityIndicator from "../components/ActivityIndicator";
-import { db } from "../../firebaseConfig";
-import useNotifications from "../auth/useNotifications";
 import { AppForm as Form, AppFormField as FormField } from "../components/form";
+import { AuthContext } from "../auth/context";
+import { db } from "../../firebaseConfig";
+import ActivityIndicator from "../components/ActivityIndicator";
+import useNotifications from "../auth/useNotifications";
 import SubmitButton from "../components/form/SubmitButton";
 import Screen from "../components/Screen";
 
