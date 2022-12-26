@@ -19,7 +19,7 @@ const validationSchema = Yup.object().shape({
 });
 
 function SubmitScreen() {
-  const [token, setToken] = useState([]);
+  const tokens = [];
   const { currentUser } = useContext(AuthContext);
   const { sendEmail, sendPushNotification } = useNotifications();
 
@@ -30,7 +30,7 @@ function SubmitScreen() {
       try {
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
-          setToken((current) => [...current, doc.data().notificationToken]);
+          tokens.push(doc.data().notificationToken);
         });
       } catch (err) {
         setErr(err);
@@ -50,7 +50,7 @@ function SubmitScreen() {
       title: "New Message",
       body: data.name + " has sent you a message",
       subject: data.subject ? data.subject : "",
-      token: token,
+      token: tokens,
     });
   };
 
