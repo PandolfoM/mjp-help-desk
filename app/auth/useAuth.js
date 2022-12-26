@@ -35,13 +35,14 @@ export default useAuth = () => {
           uid: res.user.uid,
           displayName: name,
           email,
+          admin: false,
         });
 
         await setDoc(doc(db, "userMessages", res.user.uid), {});
       } catch (e) {
         console.error(e);
       }
-      setCurrentUser(res.user);
+      setCurrentUser(res.user, { displayName: name });
     } catch (e) {
       console.error(e);
     }

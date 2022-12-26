@@ -61,7 +61,7 @@ function SubmitScreen() {
         {currentUser && (
           <Form
             inititalValues={{
-              name: `${currentUser.displayName}`,
+              name: `${currentUser.displayName || ""}`,
               email: `${currentUser.email}`,
               subject: "",
               message: "",
