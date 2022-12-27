@@ -6,7 +6,6 @@ import { AuthContext } from "../auth/context";
 import navigationTheme from "./navigationTheme";
 import { navigationRef } from "./rootNavigation";
 import AppNavigator from "./AppNavigator";
-import useNotifications from "../auth/useNotifications";
 
 function NavigateContainer() {
   const { currentUser } = useContext(AuthContext);

@@ -11,6 +11,7 @@ import Screen from "../components/Screen";
 import AppText from "../components/Text";
 import colors from "../config/colors";
 import ActivityIndicator from "../components/ActivityIndicator";
+import routes from "../navigation/routes";
 
 function MessagesScreen({ navigation }) {
   const [messages, setMessages] = useState([]);
@@ -55,7 +56,7 @@ function MessagesScreen({ navigation }) {
                 "MM/DD/YYYY, h:mm:ss A"
               )}
               clickable
-              onPress={() => navigation.navigate("MessageDetails", item)}
+              onPress={() => navigation.navigate(routes.MESSAGE_DETAILS, item)}
             />
           )}
         />

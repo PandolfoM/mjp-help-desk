@@ -3,6 +3,7 @@ import { View, StyleSheet, ImageBackground, Image } from "react-native";
 
 import Button from "../components/Button";
 import Text from "../components/Text";
+import routes from "../navigation/routes";
 
 function WelcomeScreen({ navigation }) {
   return (
@@ -15,11 +16,14 @@ function WelcomeScreen({ navigation }) {
         <Text style={styles.text}>MJP Systems</Text>
       </View>
       <View style={styles.buttonContainer}>
-        <Button title="Login" onPress={() => navigation.navigate("Login")} />
+        <Button
+          title="Login"
+          onPress={() => navigation.navigate(routes.LOGIN)}
+        />
         <Button
           title="Sign Up"
           color="secondary"
-          onPress={() => navigation.navigate("SignUp")}
+          onPress={() => navigation.navigate(routes.SIGNUP)}
         />
       </View>
     </ImageBackground>

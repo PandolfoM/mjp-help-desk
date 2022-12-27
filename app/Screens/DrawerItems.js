@@ -7,6 +7,7 @@ import Icon from "../components/Icon";
 import ListItem from "../components/ListItem";
 import Screen from "../components/Screen";
 import colors from "../config/colors";
+import routes from "../navigation/routes";
 
 function DrawerItems({ navigation }) {
   const { currentUser, isAdmin } = useContext(AuthContext);
@@ -36,7 +37,7 @@ function DrawerItems({ navigation }) {
         <ListItem
           title="Home"
           clickable
-          onPress={() => navigation.navigate("Home")}
+          onPress={() => navigation.navigate(routes.HOME)}
           IconComponent={<Icon name="home" backgroundColor={"dodgerblue"} />}
         />
       </View>
@@ -45,7 +46,7 @@ function DrawerItems({ navigation }) {
           <ListItem
             title="Dashboard"
             clickable
-            onPress={() => navigation.navigate("Dashboard")}
+            onPress={() => navigation.navigate(routes.DASHBOARD)}
             IconComponent={
               <Icon name="view-dashboard" backgroundColor={colors.secondary} />
             }
