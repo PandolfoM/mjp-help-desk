@@ -1,24 +1,22 @@
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useContext } from "react";
 import { AuthContext } from "../auth/context";
 import Header from "../components/Header";
 import Icon from "../components/Icon";
 import colors from "../config/colors";
-import DashboardScreen from "../Screens/DashboardScreen";
+import AppDetailsScreen from "../Screens/AppDetailsScreen";
+import EditAdmins from "../Screens/EditAdminsScreen";
 
-const {
-  createNativeStackNavigator,
-} = require("@react-navigation/native-stack");
-
-const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 const DashboardNavigator = ({ navigation }) => {
   const { currentUser } = useContext(AuthContext);
   const photo = currentUser.photoURL;
 
   return (
-    <Stack.Navigator
+    <Tab.Navigator
       screenOptions={{
-        headerTitle: "Dashboard",
+        tabBarShowLabel: false,
         headerRight: () => (
           <Header
             image={photo && photo}
@@ -38,8 +36,39 @@ const DashboardNavigator = ({ navigation }) => {
           />
         ),
       }}>
-      <Stack.Screen name="DashboardScreen" component={DashboardScreen} />
-    </Stack.Navigator>
+      <Tab.Screen
+        options={{
+          headerTitle: "Edit Admins",
+          tabBarShowLabel: false,
+          tabBarIcon: ({ focused, color }) => (
+            <Icon
+              iconColor={color}
+              backgroundColor="transparent"
+              name={focused ? "account-group" : "account-group-outline"}
+              size={55}
+            />
+          ),
+        }}
+        name="EditAdmins"
+        component={EditAdmins}
+      />
+      <Tab.Screen
+        options={{
+          headerTitle: "App Details",
+          tabBarShowLabel: false,
+          tabBarIcon: ({ focused, color }) => (
+            <Icon
+              iconColor={color}
+              backgroundColor="transparent"
+              name={focused ? "note-edit" : "note-edit-outline"}
+              size={55}
+            />
+          ),
+        }}
+        name="AppDetails"
+        component={AppDetailsScreen}
+      />
+    </Tab.Navigator>
   );
 };
 
