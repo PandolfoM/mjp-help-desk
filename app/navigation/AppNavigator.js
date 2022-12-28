@@ -11,6 +11,7 @@ import Icon from "../components/Icon";
 import MessagesNavigator from "./MessagesNavigator";
 import SubmitScreen from "../Screens/SubmitScreen";
 import SettingsNavigator from "./SettingsNavigator";
+import { Keyboard } from "react-native";
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -40,7 +41,10 @@ function TabRoutes({ navigation }) {
                 />
               )
             }
-            onPress={navigation.toggleDrawer}
+            onPress={() => {
+              navigation.toggleDrawer();
+              Keyboard.dismiss();
+            }}
           />
         ),
       }}>

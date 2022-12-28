@@ -34,7 +34,10 @@ const SettingsNavigator = ({ navigation }) => {
                 />
               )
             }
-            onPress={navigation.toggleDrawer}
+            onPress={() => {
+              navigation.toggleDrawer();
+              Keyboard.dismiss();
+            }}
           />
         ),
       }}>

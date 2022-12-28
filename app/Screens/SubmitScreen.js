@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { StyleSheet } from "react-native";
+import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 
 import { AppForm as Form, AppFormField as FormField } from "../components/form";
@@ -57,44 +57,49 @@ function SubmitScreen() {
   return (
     <>
       <ActivityIndicator visible={!currentUser} />
-      <Screen style={styles.container}>
-        {currentUser && (
-          <Form
-            inititalValues={{
-              name: `${currentUser.displayName || ""}`,
-              email: `${currentUser.email}`,
-              subject: "",
-              message: "",
-            }}
-            onSubmit={handleSubmit}
-            validationSchema={validationSchema}>
-            <FormField
-              autoCapitalize="words"
-              autoCorrect={false}
-              name="name"
-              placeholder="Name"
-              textContentType="name"
-            />
-            <FormField
-              autoCapitalize="none"
-              autoCorrect={false}
-              keyboardType="email-address"
-              name="email"
-              placeholder="Email"
-              textContentType="emailAddress"
-            />
-            <FormField name="subject" placeholder="Subject" />
-            <FormField
-              name="message"
-              placeholder="Message"
-              multiline
-              numberOfLines={3}
-              style={{ height: 200 }}
-            />
-            <SubmitButton title="Send" />
-          </Form>
-        )}
-      </Screen>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={100}
+        style={{ flex: 1 }}>
+        <Screen style={styles.container}>
+          {currentUser && (
+            <Form
+              inititalValues={{
+                name: `${currentUser.displayName || ""}`,
+                email: `${currentUser.email}`,
+                subject: "",
+                message: "",
+              }}
+              onSubmit={handleSubmit}
+              validationSchema={validationSchema}>
+              <FormField
+                autoCapitalize="words"
+                autoCorrect={false}
+                name="name"
+                placeholder="Name"
+                textContentType="name"
+              />
+              <FormField
+                autoCapitalize="none"
+                autoCorrect={false}
+                keyboardType="email-address"
+                name="email"
+                placeholder="Email"
+                textContentType="emailAddress"
+              />
+              <FormField name="subject" placeholder="Subject" />
+              <FormField
+                name="message"
+                placeholder="Message"
+                multiline
+                numberOfLines={3}
+                style={{ height: 200 }}
+              />
+              <SubmitButton title="Send" />
+            </Form>
+          )}
+        </Screen>
+      </KeyboardAvoidingView>
     </>
   );
 }

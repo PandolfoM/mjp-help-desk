@@ -32,7 +32,10 @@ const DashboardNavigator = ({ navigation }) => {
                 />
               )
             }
-            onPress={navigation.toggleDrawer}
+            onPress={() => {
+              navigation.toggleDrawer();
+              Keyboard.dismiss();
+            }}
           />
         ),
       }}>

@@ -1,5 +1,11 @@
 import React from "react";
-import { StyleSheet, Image, View } from "react-native";
+import {
+  StyleSheet,
+  Image,
+  View,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import * as Yup from "yup";
 
 import { AppForm as Form, AppFormField as FormField } from "../components/form";
@@ -23,44 +29,49 @@ function SignUpScreen() {
   };
 
   return (
-    <Screen style={styles.container}>
-      <View style={styles.logoContainer}>
-        <Image style={styles.icon} source={require("../assets/icon.png")} />
-        <Text style={styles.text}>MJP Systems</Text>
-      </View>
-      <View style={styles.form}>
-        <Form
-          inititalValues={{ email: "", password: "" }}
-          onSubmit={handleSubmit}
-          validationSchema={validationSchema}>
-          <FormField
-            autoCapitalize="words"
-            autoCorrect={false}
-            name="name"
-            placeholder="Name"
-            textContentType="name"
-          />
-          <FormField
-            autoCapitalize="none"
-            autoCorrect={false}
-            keyboardType="email-address"
-            name="email"
-            placeholder="Email"
-            textContentType="emailAddress"
-          />
-          <FormField
-            autoCapitalize="none"
-            autoCorrect={false}
-            icon="lock"
-            name="password"
-            placeholder="Password"
-            secureTextEntry
-            textContentType="password"
-          />
-          <SubmitButton title="Sign Up" />
-        </Form>
-      </View>
-    </Screen>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={100}
+      style={{ flex: 1 }}>
+      <Screen style={styles.container}>
+        <View style={styles.logoContainer}>
+          <Image style={styles.icon} source={require("../assets/icon.png")} />
+          <Text style={styles.text}>MJP Systems</Text>
+        </View>
+        <View style={styles.form}>
+          <Form
+            inititalValues={{ email: "", password: "" }}
+            onSubmit={handleSubmit}
+            validationSchema={validationSchema}>
+            <FormField
+              autoCapitalize="words"
+              autoCorrect={false}
+              name="name"
+              placeholder="Name"
+              textContentType="name"
+            />
+            <FormField
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardType="email-address"
+              name="email"
+              placeholder="Email"
+              textContentType="emailAddress"
+            />
+            <FormField
+              autoCapitalize="none"
+              autoCorrect={false}
+              icon="lock"
+              name="password"
+              placeholder="Password"
+              secureTextEntry
+              textContentType="password"
+            />
+            <SubmitButton title="Sign Up" />
+          </Form>
+        </View>
+      </Screen>
+    </KeyboardAvoidingView>
   );
 }
 
