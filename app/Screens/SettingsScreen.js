@@ -1,23 +1,26 @@
 import * as ImagePicker from "expo-image-picker";
 import { updateProfile } from "firebase/auth/react-native";
-import { doc, setDoc, updateDoc } from "firebase/firestore";
-import {
-  getDownloadURL,
-  ref,
-  uploadBytes,
-  uploadBytesResumable,
-} from "firebase/storage";
-import React, { useContext, useState } from "react";
-import { View, StyleSheet, Image, Platform } from "react-native";
-import { db, storage } from "../../firebaseConfig";
+import { doc, updateDoc } from "firebase/firestore";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import React, { useContext, useEffect, useState } from "react";
+import { View, StyleSheet, Image } from "react-native";
+
+import ActivityIndicator from "../components/ActivityIndicator";
 import { AuthContext } from "../auth/context";
 import Button from "../components/Button";
-
 import colors from "../config/colors";
+import { db, storage } from "../../firebaseConfig";
+import Icon from "../components/Icon";
 
 function SettingsScreen() {
   const { currentUser } = useContext(AuthContext);
   const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setImage(currentUser.photoURL);
+    setLoading(false);
+  }, []);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -29,6 +32,7 @@ function SettingsScreen() {
 
     if (!result.canceled) {
       try {
+        setLoading(true);
         const uploadUrl = await uploadImageAsync(result.assets[0].uri);
         setImage(uploadUrl);
 
@@ -43,9 +47,28 @@ function SettingsScreen() {
         } catch (e) {
           console.log(e);
         }
+        setLoading(false);
       } catch (e) {
         console.log(e);
       }
+    }
+  };
+
+  const removeImage = async () => {
+    setLoading(true);
+    try {
+      await updateProfile(currentUser, {
+        photoURL: "",
+      });
+
+      await updateDoc(doc(db, "users", currentUser.uid), {
+        photoURL: "",
+      });
+
+      setImage(null);
+      setLoading(false);
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -73,18 +96,34 @@ function SettingsScreen() {
   }
 
   return (
-    <View style={styles.container}>
-      <Image style={styles.avatar} source={{ uri: image }}></Image>
-      <Button title={"Select Image"} onPress={pickImage} />
-    </View>
+    <>
+      <ActivityIndicator visible={loading} />
+      <View style={styles.container}>
+        {!image ? (
+          <Icon
+            sizeMultiplier={1}
+            iconColor={colors.dark}
+            backgroundColor="transparent"
+            name="account-circle"
+            size={150}
+          />
+        ) : (
+          <Image style={styles.avatar} source={{ uri: image }}></Image>
+        )}
+        <Button title={"Select Image"} onPress={pickImage} />
+        {image && (
+          <Button title={"Remove Profile Picture"} onPress={removeImage} />
+        )}
+      </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   avatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 150,
+    height: 150,
+    borderRadius: 75,
     backgroundColor: colors.dark,
   },
   container: {

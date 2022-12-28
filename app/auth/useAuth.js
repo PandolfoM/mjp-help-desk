@@ -42,7 +42,7 @@ export default useAuth = () => {
       } catch (e) {
         console.error(e);
       }
-      setCurrentUser(res.user, { displayName: name });
+      setCurrentUser(res.user);
     } catch (e) {
       console.error(e);
     }
