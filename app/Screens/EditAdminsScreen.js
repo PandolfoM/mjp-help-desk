@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
 import Screen from "../components/Screen";
 import Text from "../components/Text";
@@ -11,6 +11,7 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
+
 import { db } from "../../firebaseConfig";
 import ActivityIndicator from "../components/ActivityIndicator";
 import ListItem from "../components/ListItem";
@@ -50,6 +51,7 @@ function DashboardScreen() {
   }, []);
 
   const handleSearch = async () => {
+    if (email === "") return;
     setLoading(true);
     const q = query(collection(db, "users"), where("email", "==", email));
 
