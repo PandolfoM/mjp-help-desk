@@ -56,9 +56,14 @@ function DashboardScreen() {
     try {
       const querySnapshot = await getDocs(q);
 
+      if (querySnapshot.empty) {
+        setError(email + " is not a registered email");
+        return setLoading(false);
+      }
+
       querySnapshot.forEach((doc) => {
         if (doc.data().admin === true) {
-          setError(doc.data().displayName + " Is already an admin");
+          setError(doc.data().displayName + " is already an admin");
           return;
         }
         setUser(doc.data());
@@ -171,7 +176,9 @@ function DashboardScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    padding: 10,
+  },
 });
 
 export default DashboardScreen;
