@@ -18,6 +18,7 @@ import ItemSeparator from "../components/ItemSeparator";
 import Icon from "../components/Icon";
 import colors from "../config/colors";
 import ListItemDeleteActions from "../components/ListItemDeleteActions";
+import ErrorMessage from "../components/ErrorMessage";
 
 function DashboardScreen() {
   const [admins, setAdmins] = useState([]);
@@ -56,10 +57,6 @@ function DashboardScreen() {
       const querySnapshot = await getDocs(q);
 
       querySnapshot.forEach((doc) => {
-        console.log(doc.data().email);
-        if (!doc.data()) {
-          console.log("Not a valid email");
-        }
         if (doc.data().admin === true) {
           setError(doc.data().displayName + " Is already an admin");
           return;
@@ -72,22 +69,38 @@ function DashboardScreen() {
     }
   };
 
-  const updateUser = async (user) => {
-    console.log(user);
+  const handleRemove = async (user) => {
     const userRef = doc(db, "users", user);
 
+    if (admins.length > 1) {
+      await updateDoc(userRef, {
+        admin: false,
+      });
+
+      setAdmins((current) => current.filter((admin) => admin.uid !== user));
+    } else {
+      setError("There must be at least 1 admin!");
+      setEmail("");
+      setUser(null);
+    }
+  };
+
+  const handleAdd = async (user) => {
+    const userRef = doc(db, "users", user.uid);
+
     await updateDoc(userRef, {
-      admin: false,
+      admin: true,
     });
 
-    setAdmins((current) => current.filter((admin) => admin.uid !== user));
+    setAdmins((current) => [...current, user]);
+    setEmail("");
+    setUser(null);
   };
 
   return (
     <>
       <ActivityIndicator visible={loading} />
       <Screen disableScroll style={styles.container}>
-        <Text>Add Admins</Text>
         <TextInput
           autoCapitalize={false}
           autoComplete={false}
@@ -98,8 +111,27 @@ function DashboardScreen() {
           onEndEditing={handleSearch}
           value={email}></TextInput>
         <ActivityIndicator visible={loading} />
-        {error && <Text>{error}</Text>}
-        {user && <ListItem title={user.displayName} subtitle={user.email} />}
+        <ErrorMessage visible={error} error={error} />
+        {user && (
+          <ListItem
+            title={user.displayName}
+            subtitle={user.email}
+            check
+            addAction={() => handleAdd(user)}
+            image={user.photoURL && user.photoURL}
+            IconComponent={
+              !user.photoURL && (
+                <Icon
+                  sizeMultiplier={1}
+                  iconColor={colors.dark}
+                  backgroundColor="transparent"
+                  name="account-circle"
+                  size={60}
+                />
+              )
+            }
+          />
+        )}
         {admins.length > 0 && (
           <>
             <Text>Current Admins:</Text>
@@ -111,10 +143,9 @@ function DashboardScreen() {
                   title={item.displayName}
                   subtitle={item.email}
                   image={item.photoURL && item.photoURL}
-                  o
                   renderRightActions={() => (
                     <ListItemDeleteActions
-                      onPress={() => updateUser(item.uid)}
+                      onPress={() => handleRemove(item.uid)}
                     />
                   )}
                   IconComponent={

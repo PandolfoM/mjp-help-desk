@@ -7,6 +7,8 @@ import Text from "./Text";
 import { Swipeable } from "react-native-gesture-handler";
 
 function ListItem({
+  addAction,
+  check,
   clickable,
   IconComponent,
   image,
@@ -38,6 +40,14 @@ function ListItem({
           {clickable && (
             <MaterialCommunityIcons
               name="chevron-right"
+              size={25}
+              color={colors.dark}
+            />
+          )}
+          {check && (
+            <MaterialCommunityIcons
+              onPress={addAction}
+              name="plus"
               size={25}
               color={colors.dark}
             />
