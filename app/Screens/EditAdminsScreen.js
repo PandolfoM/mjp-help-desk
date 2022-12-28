@@ -125,7 +125,7 @@ function DashboardScreen() {
             subtitle={user.email}
             check
             addAction={() => handleAdd(user)}
-            image={user.photoURL && user.photoURL}
+            image={user.photoURL && { uri: user.photoURL }}
             IconComponent={
               !user.photoURL && (
                 <Icon
@@ -149,7 +149,7 @@ function DashboardScreen() {
                 <ListItem
                   title={item.displayName}
                   subtitle={item.email}
-                  image={item.photoURL && item.photoURL}
+                  image={item.photoURL && { uri: item.photoURL }}
                   renderRightActions={() => (
                     <ListItemDeleteActions
                       onPress={() => handleRemove(item.uid)}

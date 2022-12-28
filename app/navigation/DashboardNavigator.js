@@ -1,5 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useContext } from "react";
+import { Keyboard } from "react-native";
 import { AuthContext } from "../auth/context";
 import Header from "../components/Header";
 import Icon from "../components/Icon";
@@ -12,6 +13,7 @@ const Tab = createBottomTabNavigator();
 const DashboardNavigator = ({ navigation }) => {
   const { currentUser } = useContext(AuthContext);
   const photo = currentUser.photoURL;
+  console.log(photo);
 
   return (
     <Tab.Navigator

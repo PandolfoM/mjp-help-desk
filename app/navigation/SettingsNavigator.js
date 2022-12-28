@@ -1,9 +1,10 @@
 import { useContext } from "react";
+import { Keyboard } from "react-native";
 import { AuthContext } from "../auth/context";
 import Header from "../components/Header";
 import Icon from "../components/Icon";
 import colors from "../config/colors";
-import SettingsScreen from "../Screens/Settings";
+import SettingsScreen from "../Screens/SettingsScreen";
 
 const {
   createNativeStackNavigator,
@@ -19,6 +20,7 @@ const SettingsNavigator = ({ navigation }) => {
     <Stack.Navigator
       screenOptions={{
         tabBarShowLabel: false,
+        headerTitle: "Settings",
         headerRight: () => (
           <Header
             image={photo && photo}

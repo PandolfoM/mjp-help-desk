@@ -21,7 +21,7 @@ function DrawerItems({ navigation }) {
           style={styles.profile}
           title={currentUser.displayName}
           subtitle={currentUser.email}
-          image={photo && photo}
+          image={photo && { uri: photo }}
           IconComponent={
             !photo && (
               <Icon

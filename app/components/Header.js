@@ -5,7 +5,7 @@ function Header({ onPress, image, IconComponent }) {
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={0.8}>
       {IconComponent}
-      {image && <Image style={styles.image} source={image} />}
+      {image && <Image style={styles.image} source={{ uri: image }} />}
     </TouchableOpacity>
   );
 }
