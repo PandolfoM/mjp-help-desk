@@ -32,8 +32,8 @@ function SubmitScreen() {
         querySnapshot.forEach((doc) => {
           tokens.push(doc.data().notificationToken);
         });
-      } catch (err) {
-        setErr(err);
+      } catch (e) {
+        console.log(e);
       }
 
       return () => {
