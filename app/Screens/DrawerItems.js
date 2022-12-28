@@ -53,6 +53,12 @@ function DrawerItems({ navigation }) {
           />
         )}
         <ListItem
+          title="Settings"
+          clickable
+          onPress={() => navigation.navigate(routes.SETTINGS)}
+          IconComponent={<Icon name="cog" backgroundColor={colors.dark} />}
+        />
+        <ListItem
           title="Logout"
           clickable
           onPress={() => logOut()}

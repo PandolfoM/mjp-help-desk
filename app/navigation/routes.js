@@ -4,4 +4,5 @@ export default {
   MESSAGE_DETAILS: "MessageDetails",
   SIGNUP: "SignUp",
   LOGIN: "Login",
+  SETTINGS: "Settings",
 };

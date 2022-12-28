@@ -2,10 +2,10 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import AppText from "../components/Text";
 
-function AppDetailsScreen() {
+function SettingsScreen() {
   return (
     <View style={styles.container}>
-      <AppText>App Details</AppText>
+      <AppText>Settings</AppText>
     </View>
   );
 }
@@ -14,4 +14,4 @@ const styles = StyleSheet.create({
   container: {},
 });
 
-export default AppDetailsScreen;
+export default SettingsScreen;

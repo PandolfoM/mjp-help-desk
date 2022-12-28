@@ -10,6 +10,7 @@ import Header from "../components/Header";
 import Icon from "../components/Icon";
 import MessagesNavigator from "./MessagesNavigator";
 import SubmitScreen from "../Screens/SubmitScreen";
+import SettingsNavigator from "./SettingsNavigator";
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -89,6 +90,7 @@ function AppNavigator() {
       })}>
       <Drawer.Screen component={TabRoutes} name="Home" />
       <Drawer.Screen component={DashboardNavigator} name="Dashboard" />
+      <Drawer.Screen component={SettingsNavigator} name="Settings" />
     </Drawer.Navigator>
   );
 }
