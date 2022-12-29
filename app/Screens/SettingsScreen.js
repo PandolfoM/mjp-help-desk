@@ -3,11 +3,11 @@ import { updateProfile } from "firebase/auth/react-native";
 import { doc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import React, { useContext, useEffect, useState } from "react";
-import { View, StyleSheet, Image } from "react-native";
+import { View, StyleSheet, Image, TouchableOpacity } from "react-native";
 
-import ActivityIndicator from "../components/ActivityIndicator";
 import { AuthContext } from "../auth/context";
-import Button from "../components/Button";
+import ActivityIndicator from "../components/ActivityIndicator";
+import AppText from "../components/Text";
 import colors from "../config/colors";
 import { db, storage } from "../../firebaseConfig";
 import Icon from "../components/Icon";
@@ -100,19 +100,41 @@ function SettingsScreen() {
       <ActivityIndicator visible={loading} />
       <View style={styles.container}>
         {!image ? (
-          <Icon
-            sizeMultiplier={1}
-            iconColor={colors.dark}
-            backgroundColor="transparent"
-            name="account-circle"
-            size={150}
-          />
+          <TouchableOpacity
+            style={styles.avatarContainer}
+            onPress={pickImage}
+            activeOpacity={0.8}>
+            <Image style={styles.avatar} source={{ uri: image }} />
+            <Icon
+              style={styles.camera}
+              name="camera"
+              backgroundColor="transparent"
+              iconColor={"rgba(255, 255, 255, 0.9)"}
+              size={80}
+            />
+          </TouchableOpacity>
         ) : (
-          <Image style={styles.avatar} source={{ uri: image }}></Image>
+          <TouchableOpacity
+            style={styles.avatarContainer}
+            onPress={pickImage}
+            activeOpacity={0.8}>
+            <Image style={styles.avatar} source={{ uri: image }} />
+            <Icon
+              style={styles.camera}
+              name="camera"
+              backgroundColor="transparent"
+              iconColor={"rgba(255, 255, 255, 0.9)"}
+              size={80}
+            />
+          </TouchableOpacity>
         )}
-        <Button title={"Select Image"} onPress={pickImage} />
+        {/* <TouchableOpacity onPress={pickImage}>
+          <AppText style={styles.selectColor}>Select Image</AppText>
+        </TouchableOpacity> */}
         {image && (
-          <Button title={"Remove Profile Picture"} onPress={removeImage} />
+          <TouchableOpacity onPress={removeImage} activeOpacity={0.8}>
+            <AppText style={styles.selectColor}>Remove Profile Picture</AppText>
+          </TouchableOpacity>
         )}
       </View>
     </>
@@ -121,14 +143,29 @@ function SettingsScreen() {
 
 const styles = StyleSheet.create({
   avatar: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    borderRadius: 50,
     backgroundColor: colors.dark,
+  },
+  avatarContainer: {
+    position: "relative",
+    height: 100,
+    width: 100,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  camera: {
+    position: "absolute",
   },
   container: {
     padding: 10,
     alignItems: "center",
+  },
+  selectColor: {
+    color: colors.primary,
+    paddingVertical: 10,
   },
 });
 
