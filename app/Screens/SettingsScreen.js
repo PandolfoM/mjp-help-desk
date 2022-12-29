@@ -1,6 +1,10 @@
 import * as ImagePicker from "expo-image-picker";
 import * as Yup from "yup";
-import { updateEmail, updateProfile } from "firebase/auth/react-native";
+import {
+  updateEmail,
+  updatePassword,
+  updateProfile,
+} from "firebase/auth/react-native";
 import { doc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import React, { useContext, useEffect, useState } from "react";
@@ -26,10 +30,12 @@ import ErrorMessage from "../components/ErrorMessage";
 const validationSchema = Yup.object().shape({
   name: Yup.string().min(1).label("Name"),
   email: Yup.string().email().label("Email"),
+  password: Yup.string().min(8).label("Password"),
 });
 
 function SettingsScreen() {
   const [emailErr, setEmailErr] = useState("");
+  const [passwordErr, setPasswordErr] = useState("");
   const { currentUser } = useContext(AuthContext);
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -112,23 +118,18 @@ function SettingsScreen() {
     return await getDownloadURL(fileRef);
   }
 
-  const handleSubmit = async ({ name, email }) => {
+  const handleSubmit = async (values, { resetForm }) => {
     try {
       setLoading(true);
-      if (name) {
+      if (values.name) {
         await updateProfile(currentUser, {
-          displayName: name,
-        }).then(() => {
-          setLoading(false);
-        });
+          displayName: values.name,
+        }).catch((e) => console.log(e));
       }
 
-      if (email) {
-        updateEmail(currentUser, email)
-          .then(() => {
-            setEmailErr("");
-            setLoading(false);
-          })
+      if (values.email) {
+        updateEmail(currentUser, values.email)
+          .then(() => setEmailErr(""))
           .catch((e) => {
             let code = JSON.stringify(e.code);
             let requiresLogin = code.includes("requires-recent-login");
@@ -138,6 +139,21 @@ function SettingsScreen() {
             !requiresLogin && !alreadyInUse && setEmailErr(code);
           });
       }
+
+      if (values.password) {
+        updatePassword(currentUser, values.password)
+          .then(() => setPasswordErr(""))
+          .catch((e) => {
+            let code = JSON.stringify(e.code);
+            console.log(code);
+            let requiresLogin = code.includes("requires-recent-login");
+            requiresLogin && setPasswordErr("Login again and try again");
+            !requiresLogin && !alreadyInUse && setPasswordErr(code);
+          });
+      }
+
+      setLoading(false);
+      resetForm();
     } catch (e) {
       console.log(e);
     }
@@ -196,6 +212,7 @@ function SettingsScreen() {
                 inititalValues={{
                   name: "",
                   email: "",
+                  password: "",
                 }}
                 onSubmit={handleSubmit}
                 validationSchema={validationSchema}>
@@ -215,6 +232,16 @@ function SettingsScreen() {
                   textContentType="emailAddress"
                 />
                 <ErrorMessage visible={emailErr} error={emailErr} />
+                <FormField
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  icon="lock"
+                  name="password"
+                  placeholder="Password"
+                  secureTextEntry
+                  textContentType="password"
+                />
+                <ErrorMessage visible={passwordErr} error={passwordErr} />
                 <AppText style={{ color: colors.danger, paddingVertical: 10 }}>
                   * Blank fields will not be changed
                 </AppText>
