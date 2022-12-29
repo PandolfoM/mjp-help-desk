@@ -16,9 +16,11 @@ import Text from "../components/Text";
 function AdminMessagesScreen({ navigation }) {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const messagesRef = collection(db, "userMessages");
 
   useEffect(() => {
-    const messagesRef = collection(db, "userMessages");
     const getMessages = async () => {
       const unsub = await getDocs(messagesRef);
       unsub.forEach((doc) => {
@@ -31,6 +33,18 @@ function AdminMessagesScreen({ navigation }) {
 
     getMessages();
   }, []);
+
+  const refreshMessages = async () => {
+    setRefreshing(true);
+    const messages = await getDocs(messagesRef);
+    messages.forEach((doc) => {
+      if (doc.data) {
+        setMessages(doc.data().messages);
+      }
+      setLoading(false);
+      setRefreshing(false);
+    });
+  };
 
   return (
     <Screen disableScroll style={styles.container}>
@@ -45,6 +59,8 @@ function AdminMessagesScreen({ navigation }) {
           data={messages.reverse()}
           keyExtractor={(item) => item.id}
           ItemSeparatorComponent={ItemSeparator}
+          onRefresh={() => refreshMessages()}
+          refreshing={refreshing}
           renderItem={({ item }) => (
             <ListItem
               title={item.subject}
