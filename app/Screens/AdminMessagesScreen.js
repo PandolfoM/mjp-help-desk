@@ -1,43 +1,37 @@
-import React, { useContext, useEffect, useState } from "react";
-import { View, StyleSheet, FlatList } from "react-native";
-import { doc, onSnapshot } from "firebase/firestore";
 import dayjs from "dayjs";
+import { collection, doc, getDocs } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, FlatList } from "react-native";
+import { db } from "../../firebaseConfig";
+import ActivityIndicator from "../components/ActivityIndicator";
 import ItemSeparator from "../components/ItemSeparator";
 import ListItem from "../components/ListItem";
-
-import { db } from "../../firebaseConfig";
-import { AuthContext } from "../auth/context";
 import Screen from "../components/Screen";
 import Text from "../components/Text";
 import colors from "../config/colors";
-import ActivityIndicator from "../components/ActivityIndicator";
 import routes from "../navigation/routes";
 
-function MessagesScreen({ navigation }) {
+function AdminMessagesScreen({ navigation }) {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
-    const getMessages = () => {
-      const unsub = onSnapshot(
-        doc(db, "userMessages", currentUser.uid),
-        (doc) => {
-          if (doc.data) {
-            setMessages(doc.data().messages);
-          }
-          setLoading(false);
+    const messagesRef = collection(db, "userMessages");
+    const getMessages = async () => {
+      const unsub = await getDocs(messagesRef);
+      unsub.forEach((doc) => {
+        if (doc.data) {
+          setMessages(doc.data().messages);
         }
-      );
-
-      return () => unsub();
+        setLoading(false);
+      });
     };
 
-    currentUser.uid && getMessages();
-  }, [currentUser.uid]);
+    getMessages();
+  }, []);
 
   return (
-    <Screen style={styles.screen} disableScroll>
+    <Screen disableScroll style={styles.container}>
       <ActivityIndicator visible={loading} />
       {!messages && !loading && (
         <View style={styles.noMessages}>
@@ -66,13 +60,13 @@ function MessagesScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.light,
+  },
   noMessages: {
     justifyContent: "center",
     alignItems: "center",
     flex: 1,
-  },
-  screen: {
-    backgroundColor: colors.light,
   },
   text: {
     fontSize: 30,
@@ -81,4 +75,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MessagesScreen;
+export default AdminMessagesScreen;

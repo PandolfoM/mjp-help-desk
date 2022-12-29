@@ -7,6 +7,7 @@ import Icon from "../components/Icon";
 import colors from "../config/colors";
 import AppDetailsScreen from "../Screens/AppDetailsScreen";
 import EditAdmins from "../Screens/EditAdminsScreen";
+import AdminMessagesNavigator from "./AdminMessagesNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -55,6 +56,22 @@ const DashboardNavigator = ({ navigation }) => {
         }}
         name="EditAdmins"
         component={EditAdmins}
+      />
+      <Tab.Screen
+        options={{
+          headerTitle: "Messages",
+          tabBarShowLabel: false,
+          tabBarIcon: ({ focused, color }) => (
+            <Icon
+              iconColor={color}
+              backgroundColor="transparent"
+              name={focused ? "message" : "message-outline"}
+              size={55}
+            />
+          ),
+        }}
+        name="AdminMessagesScreen"
+        component={AdminMessagesNavigator}
       />
       <Tab.Screen
         options={{
