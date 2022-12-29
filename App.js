@@ -6,6 +6,7 @@ import { AuthContextProvider } from "./app/auth/context";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth/react-native";
 import NavigateContainer from "./app/navigation/NavigateContainer";
+import { MessageContextProvider } from "./app/context/MessageContext";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -28,7 +29,9 @@ export default function App() {
 
   return (
     <AuthContextProvider>
-      <NavigateContainer />
+      <MessageContextProvider>
+        <NavigateContainer />
+      </MessageContextProvider>
     </AuthContextProvider>
   );
 }

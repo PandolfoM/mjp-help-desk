@@ -54,7 +54,7 @@ export default useNotifications = (notificationListener) => {
       await addDoc(collection(db, "mail"), {
         to: "matt@pandolfo.com",
         message: {
-          company: company,
+          subject: company,
           html: `
             <p>Name: ${name}</p>
             <p>Email: ${email}</p>

@@ -6,7 +6,6 @@ import {
   updateProfile,
 } from "firebase/auth/react-native";
 import { doc, updateDoc } from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import React, { useContext, useEffect, useState } from "react";
 import {
   View,
@@ -18,7 +17,7 @@ import {
 
 import { AppForm as Form, AppFormField as FormField } from "../components/form";
 import { AuthContext } from "../auth/context";
-import { db, storage } from "../../firebaseConfig";
+import { db } from "../../firebaseConfig";
 import ActivityIndicator from "../components/ActivityIndicator";
 import AppText from "../components/Text";
 import colors from "../config/colors";
@@ -26,7 +25,7 @@ import Icon from "../components/Icon";
 import SubmitButton from "../components/form/SubmitButton";
 import Screen from "../components/Screen";
 import ErrorMessage from "../components/ErrorMessage";
-import useUpload from "../context/useUpload";
+import useUpload from "../hooks/useUpload";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().min(1).label("Name"),

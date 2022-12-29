@@ -1,7 +1,7 @@
 import * as MailComposer from "expo-mail-composer";
 import dayjs from "dayjs";
 import { collection, doc, getDocs } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, StyleSheet, FlatList } from "react-native";
 
 import { db } from "../../firebaseConfig";
@@ -13,29 +13,18 @@ import routes from "../navigation/routes";
 import Screen from "../components/Screen";
 import Text from "../components/Text";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { MessageContext } from "../context/MessageContext";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 function AdminMessagesScreen({ navigation }) {
-  const [messages, setMessages] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { messages, setMessages } = useContext(MessageContext);
+  const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
   const messagesRef = collection(db, "userMessages");
 
-  useEffect(() => {
-    const getMessages = async () => {
-      const unsub = await getDocs(messagesRef);
-      unsub.forEach((doc) => {
-        if (doc.data) {
-          setMessages(doc.data().messages);
-        }
-        setLoading(false);
-      });
-    };
-
-    getMessages();
-  }, []);
-
   const refreshMessages = async () => {
+    setLoading(true);
     setRefreshing(true);
     const messages = await getDocs(messagesRef);
     messages.forEach((doc) => {
@@ -73,6 +62,15 @@ function AdminMessagesScreen({ navigation }) {
               )}
               clickable
               onPress={() => navigation.navigate(routes.MESSAGE_DETAILS, item)}
+              IconComponent={
+                item.read === false && (
+                  <MaterialCommunityIcons
+                    name="circle"
+                    size={10}
+                    color={colors.danger}
+                  />
+                )
+              }
             />
           )}
         />

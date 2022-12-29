@@ -5,6 +5,7 @@ import { AuthContext } from "../auth/context";
 import Header from "../components/Header";
 import Icon from "../components/Icon";
 import colors from "../config/colors";
+import { MessageContext } from "../context/MessageContext";
 import AppDetailsScreen from "../Screens/AppDetailsScreen";
 import EditAdmins from "../Screens/EditAdminsScreen";
 import AdminMessagesNavigator from "./AdminMessagesNavigator";
@@ -13,6 +14,7 @@ const Tab = createBottomTabNavigator();
 
 const DashboardNavigator = ({ navigation }) => {
   const { currentUser } = useContext(AuthContext);
+  const { unreadCount } = useContext(MessageContext);
   const photo = currentUser.photoURL;
 
   return (
@@ -60,6 +62,7 @@ const DashboardNavigator = ({ navigation }) => {
       <Tab.Screen
         options={{
           headerTitle: "Messages",
+          tabBarBadge: unreadCount,
           tabBarShowLabel: false,
           tabBarIcon: ({ focused, color }) => (
             <Icon
