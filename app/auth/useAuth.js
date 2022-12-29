@@ -2,6 +2,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  updateEmail,
   updateProfile,
 } from "firebase/auth/react-native";
 import { useContext } from "react";
@@ -10,7 +11,7 @@ import { AuthContext } from "./context";
 import { doc, setDoc } from "firebase/firestore";
 
 export default useAuth = () => {
-  const { setCurrentUser } = useContext(AuthContext);
+  const { currentUser, setCurrentUser } = useContext(AuthContext);
 
   const signIn = ({ email, password }) => {
     signInWithEmailAndPassword(auth, email, password)

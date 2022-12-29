@@ -13,7 +13,6 @@ const Tab = createBottomTabNavigator();
 const DashboardNavigator = ({ navigation }) => {
   const { currentUser } = useContext(AuthContext);
   const photo = currentUser.photoURL;
-  console.log(photo);
 
   return (
     <Tab.Navigator
