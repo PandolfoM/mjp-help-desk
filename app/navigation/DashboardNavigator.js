@@ -6,7 +6,6 @@ import Header from "../components/Header";
 import Icon from "../components/Icon";
 import colors from "../config/colors";
 import { MessageContext } from "../context/MessageContext";
-import AppDetailsScreen from "../Screens/AppDetailsScreen";
 import EditAdmins from "../Screens/EditAdminsScreen";
 import AdminMessagesNavigator from "./AdminMessagesNavigator";
 
@@ -75,22 +74,6 @@ const DashboardNavigator = ({ navigation }) => {
         }}
         name="AdminMessagesScreen"
         component={AdminMessagesNavigator}
-      />
-      <Tab.Screen
-        options={{
-          headerTitle: "App Details",
-          tabBarShowLabel: false,
-          tabBarIcon: ({ focused, color }) => (
-            <Icon
-              iconColor={color}
-              backgroundColor="transparent"
-              name={focused ? "note-edit" : "note-edit-outline"}
-              size={55}
-            />
-          ),
-        }}
-        name="AppDetails"
-        component={AppDetailsScreen}
       />
     </Tab.Navigator>
   );
