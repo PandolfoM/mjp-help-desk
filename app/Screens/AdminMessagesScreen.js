@@ -37,8 +37,8 @@ function AdminMessagesScreen({ navigation }) {
   const refreshMessages = async () => {
     setLoading(true);
     setRefreshing(true);
-    const messages = await getDocs(messagesRef);
-    messages.forEach((doc) => {
+    const getMessages = await getDocs(messagesRef);
+    getMessages.forEach((doc) => {
       if (doc.data) {
         setMessages(doc.data().messages);
       }
@@ -66,7 +66,7 @@ function AdminMessagesScreen({ navigation }) {
     setMessages(newArr);
 
     await setDoc(doc(db, "userMessages", userUid), {
-      newArr,
+      messages: newArr,
     });
   };
 
