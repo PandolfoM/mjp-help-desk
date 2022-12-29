@@ -26,6 +26,7 @@ import Icon from "../components/Icon";
 import SubmitButton from "../components/form/SubmitButton";
 import Screen from "../components/Screen";
 import ErrorMessage from "../components/ErrorMessage";
+import useUpload from "../context/useUpload";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().min(1).label("Name"),
@@ -34,6 +35,7 @@ const validationSchema = Yup.object().shape({
 });
 
 function SettingsScreen() {
+  const { uploadImage } = useUpload();
   const [emailErr, setEmailErr] = useState("");
   const [passwordErr, setPasswordErr] = useState("");
   const { currentUser } = useContext(AuthContext);
@@ -56,7 +58,7 @@ function SettingsScreen() {
     if (!result.canceled) {
       try {
         setLoading(true);
-        const uploadUrl = await uploadImageAsync(result.assets[0].uri);
+        const uploadUrl = await uploadImage(result.assets[0].uri);
         setImage(uploadUrl);
 
         try {
@@ -94,29 +96,6 @@ function SettingsScreen() {
       console.log(e);
     }
   };
-
-  async function uploadImageAsync(uri) {
-    const blob = await new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.onload = function () {
-        resolve(xhr.response);
-      };
-      xhr.onerror = function (e) {
-        console.log(e);
-        reject(new TypeError("Network request failed"));
-      };
-      xhr.responseType = "blob";
-      xhr.open("GET", uri, true);
-      xhr.send(null);
-    });
-
-    const fileRef = ref(storage, currentUser.uid);
-    const result = await uploadBytesResumable(fileRef, blob);
-
-    blob.close();
-
-    return await getDownloadURL(fileRef);
-  }
 
   const handleSubmit = async (values, { resetForm }) => {
     try {
@@ -174,7 +153,7 @@ function SettingsScreen() {
                   style={styles.avatarContainer}
                   onPress={pickImage}
                   activeOpacity={0.8}>
-                  <Image style={styles.avatar} source={{ uri: image }} />
+                  <View style={styles.avatar} />
                   <Icon
                     style={styles.camera}
                     name="camera"

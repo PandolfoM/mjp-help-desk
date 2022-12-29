@@ -11,7 +11,7 @@ import { AuthContext } from "./context";
 import { doc, setDoc } from "firebase/firestore";
 
 export default useAuth = () => {
-  const { currentUser, setCurrentUser } = useContext(AuthContext);
+  const { setCurrentUser } = useContext(AuthContext);
 
   const signIn = ({ email, password }) => {
     signInWithEmailAndPassword(auth, email, password)
