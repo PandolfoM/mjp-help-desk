@@ -66,7 +66,7 @@ function TabRoutes({ navigation }) {
       <Tab.Screen
         options={{
           tabBarBadge: null,
-          headerTitle: "Messages",
+          headerTitle: "Sent Messages",
           tabBarIcon: ({ focused, color }) => (
             <Icon
               iconColor={color}
