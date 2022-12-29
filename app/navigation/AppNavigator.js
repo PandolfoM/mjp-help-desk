@@ -18,7 +18,7 @@ const Drawer = createDrawerNavigator();
 
 function TabRoutes({ navigation }) {
   useNotifications();
-  const { currentUser, isAdmin } = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
   const photo = currentUser.photoURL;
 
   return (

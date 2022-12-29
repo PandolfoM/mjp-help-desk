@@ -1,11 +1,15 @@
 import dayjs from "dayjs";
-import React from "react";
+import { composeAsync } from "expo-mail-composer";
+import React, { useContext } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { AuthContext } from "../auth/context";
 import AppText from "../components/Text";
 import colors from "../config/colors";
 import defaultStyles from "../config/styles";
 
 function MessageDetailsScreen({ route }) {
+  const { isAdmin } = useContext(AuthContext);
   const message = route.params;
 
   return (
@@ -31,9 +35,23 @@ function MessageDetailsScreen({ route }) {
 
         <View style={styles.textContainer}>
           <AppText>Email:</AppText>
-          <AppText style={[defaultStyles.textInput, styles.text]}>
-            {message.email}
-          </AppText>
+          {isAdmin ? (
+            <TouchableOpacity
+              onPress={() => composeAsync({ recipients: message.email })}>
+              <AppText
+                style={[
+                  defaultStyles.textInput,
+                  styles.text,
+                  { color: colors.secondary },
+                ]}>
+                {message.email}
+              </AppText>
+            </TouchableOpacity>
+          ) : (
+            <AppText style={[defaultStyles.textInput, styles.text]}>
+              {message.email}
+            </AppText>
+          )}
         </View>
 
         <View style={styles.textContainer}>

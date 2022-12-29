@@ -1,15 +1,17 @@
+import * as MailComposer from "expo-mail-composer";
 import dayjs from "dayjs";
 import { collection, doc, getDocs } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, FlatList } from "react-native";
+
 import { db } from "../../firebaseConfig";
 import ActivityIndicator from "../components/ActivityIndicator";
+import colors from "../config/colors";
 import ItemSeparator from "../components/ItemSeparator";
 import ListItem from "../components/ListItem";
+import routes from "../navigation/routes";
 import Screen from "../components/Screen";
 import Text from "../components/Text";
-import colors from "../config/colors";
-import routes from "../navigation/routes";
 
 function AdminMessagesScreen({ navigation }) {
   const [messages, setMessages] = useState([]);
