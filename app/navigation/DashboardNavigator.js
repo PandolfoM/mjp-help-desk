@@ -62,7 +62,7 @@ const DashboardNavigator = ({ navigation }) => {
       <Tab.Screen
         options={{
           headerTitle: "Messages",
-          tabBarBadge: unreadCount,
+          tabBarBadge: unreadCount === 0 ? null : unreadCount,
           tabBarShowLabel: false,
           tabBarIcon: ({ focused, color }) => (
             <Icon
