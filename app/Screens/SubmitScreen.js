@@ -14,7 +14,7 @@ import Screen from "../components/Screen";
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().min(1).label("Name"),
   email: Yup.string().required().email().label("Email"),
-  subject: Yup.string().label("Subject"),
+  company: Yup.string().label("Company"),
   message: Yup.string().required().min(1).label("Message"),
 });
 
@@ -49,7 +49,7 @@ function SubmitScreen() {
     sendPushNotification({
       title: "New Message",
       body: data.name + " has sent you a message",
-      subject: data.subject ? data.subject : "",
+      company: data.company ? data.company : "",
       token: tokens,
     });
   };
@@ -67,7 +67,7 @@ function SubmitScreen() {
               inititalValues={{
                 name: `${currentUser.displayName || ""}`,
                 email: `${currentUser.email}`,
-                subject: "",
+                company: "",
                 message: "",
               }}
               onSubmit={handleSubmit}
@@ -87,7 +87,7 @@ function SubmitScreen() {
                 placeholder="Email"
                 textContentType="emailAddress"
               />
-              <FormField name="subject" placeholder="Subject" />
+              <FormField name="company" placeholder="Company" />
               <FormField
                 name="message"
                 placeholder="Message"

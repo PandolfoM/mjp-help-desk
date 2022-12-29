@@ -55,9 +55,9 @@ function MessageDetailsScreen({ route }) {
         </View>
 
         <View style={styles.textContainer}>
-          <AppText>Subject:</AppText>
+          <AppText>Company:</AppText>
           <AppText style={[defaultStyles.textInput, styles.text]}>
-            {message.subject}
+            {message.company}
           </AppText>
         </View>
 

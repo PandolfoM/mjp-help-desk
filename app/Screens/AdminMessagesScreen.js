@@ -12,6 +12,7 @@ import ListItem from "../components/ListItem";
 import routes from "../navigation/routes";
 import Screen from "../components/Screen";
 import Text from "../components/Text";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 function AdminMessagesScreen({ navigation }) {
   const [messages, setMessages] = useState([]);
@@ -52,6 +53,9 @@ function AdminMessagesScreen({ navigation }) {
       {!messages && !loading && (
         <View style={styles.noMessages}>
           <Text style={styles.text}>No Messages</Text>
+          <TouchableOpacity onPress={refreshMessages}>
+            <Text style={styles.refreshButton}>Refresh</Text>
+          </TouchableOpacity>
         </View>
       )}
       {messages && !loading && (
@@ -63,7 +67,7 @@ function AdminMessagesScreen({ navigation }) {
           refreshing={refreshing}
           renderItem={({ item }) => (
             <ListItem
-              title={item.subject}
+              title={item.company}
               subtitle={dayjs(new Date(item.date * 1000)).format(
                 "MM/DD/YYYY, h:mm:ss A"
               )}
@@ -85,6 +89,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flex: 1,
+  },
+  refreshButton: {
+    color: colors.primary,
+    paddingVertical: 10,
   },
   text: {
     fontSize: 30,

@@ -49,12 +49,12 @@ export default useNotifications = (notificationListener) => {
     }
   };
 
-  const sendEmail = async ({ email, subject, message, name }) => {
+  const sendEmail = async ({ email, company, message, name }) => {
     try {
       await addDoc(collection(db, "mail"), {
         to: "matt@pandolfo.com",
         message: {
-          subject: subject,
+          company: company,
           html: `
             <p>Name: ${name}</p>
             <p>Email: ${email}</p>
@@ -68,7 +68,7 @@ export default useNotifications = (notificationListener) => {
           id: uuid.v4(),
           name: name,
           email: email,
-          subject: subject,
+          company: company,
           message: message,
           date: Timestamp.now().seconds,
           read: false,
@@ -79,13 +79,13 @@ export default useNotifications = (notificationListener) => {
     }
   };
 
-  const sendPushNotification = ({ token, title, body, subject }) => {
+  const sendPushNotification = ({ token, title, body, company }) => {
     token.forEach((t) => {
       fetch("https://exp.host/--/api/v2/push/send", {
         body: JSON.stringify({
-          to: t,
+          to: token,
           title: title,
-          subtitle: subject,
+          subtitle: company,
           body: body,
           sound: "default",
         }),

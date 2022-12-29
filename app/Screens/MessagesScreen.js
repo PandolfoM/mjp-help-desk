@@ -51,7 +51,7 @@ function MessagesScreen({ navigation }) {
           ItemSeparatorComponent={ItemSeparator}
           renderItem={({ item }) => (
             <ListItem
-              title={item.subject}
+              title={item.company}
               subtitle={dayjs(new Date(item.date * 1000)).format(
                 "MM/DD/YYYY, h:mm:ss A"
               )}
