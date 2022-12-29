@@ -1,6 +1,15 @@
 import * as MailComposer from "expo-mail-composer";
 import dayjs from "dayjs";
-import { collection, doc, getDocs } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
 import { View, StyleSheet, FlatList } from "react-native";
 
@@ -15,6 +24,8 @@ import Text from "../components/Text";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { MessageContext } from "../context/MessageContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import ListItemReadActions from "../components/ListItemReadActions";
+import ListItemDeleteActions from "../components/ListItemDeleteActions";
 
 function AdminMessagesScreen({ navigation }) {
   const { messages, setMessages } = useContext(MessageContext);
@@ -34,6 +45,33 @@ function AdminMessagesScreen({ navigation }) {
       setLoading(false);
       setRefreshing(false);
     });
+  };
+
+  const handleRead = async (message, email) => {
+    const q = query(collection(db, "users"), where("email", "==", email));
+    const querySnap = await getDocs(q);
+    let userUid = null;
+
+    querySnap.forEach((doc) => {
+      userUid = doc.data().uid;
+    });
+
+    let newArr = [...messages];
+    const messageIndex = messages.findIndex((item) => item.id === message);
+
+    newArr[messageIndex] = {
+      ...newArr[messageIndex],
+      read: !newArr[messageIndex].read,
+    };
+    setMessages(newArr);
+
+    await setDoc(doc(db, "userMessages", userUid), {
+      newArr,
+    });
+  };
+
+  const handleDelete = (message) => {
+    console.log(message);
   };
 
   return (
@@ -62,6 +100,16 @@ function AdminMessagesScreen({ navigation }) {
               )}
               clickable
               onPress={() => navigation.navigate(routes.MESSAGE_DETAILS, item)}
+              renderRightActions={() => (
+                <>
+                  <ListItemDeleteActions
+                    onPress={() => handleDelete(item.id)}
+                  />
+                  <ListItemReadActions
+                    onPress={() => handleRead(item.id, item.email)}
+                  />
+                </>
+              )}
               IconComponent={
                 item.read === false && (
                   <MaterialCommunityIcons

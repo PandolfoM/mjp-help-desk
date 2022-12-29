@@ -3,12 +3,12 @@ import { View, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
 
-function ListItemDeleteActions({ onPress, markRead }) {
+function ListItemReadActions({ onPress }) {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.container}>
         <MaterialCommunityIcons
-          name="trash-can"
+          name="email-check"
           color={colors.white}
           size={35}
         />
@@ -19,11 +19,11 @@ function ListItemDeleteActions({ onPress, markRead }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.danger,
+    backgroundColor: "dodgerblue",
     width: 70,
     justifyContent: "center",
     alignItems: "center",
   },
 });
 
-export default ListItemDeleteActions;
+export default ListItemReadActions;
