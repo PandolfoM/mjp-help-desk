@@ -1,8 +1,10 @@
 import * as MailComposer from "expo-mail-composer";
 import dayjs from "dayjs";
 import {
+  arrayRemove,
   collection,
   doc,
+  FieldValue,
   getDoc,
   getDocs,
   query,
@@ -48,30 +50,62 @@ function AdminMessagesScreen({ navigation }) {
   };
 
   const handleRead = async (message, email) => {
+    // get the user who sent the message
     const q = query(collection(db, "users"), where("email", "==", email));
     const querySnap = await getDocs(q);
     let userUid = null;
 
+    // set the user id
     querySnap.forEach((doc) => {
       userUid = doc.data().uid;
     });
 
+    // add the messages state into a new array
     let newArr = [...messages];
+
+    // find the edited message
     const messageIndex = messages.findIndex((item) => item.id === message);
 
+    // toggle between read and unread
     newArr[messageIndex] = {
       ...newArr[messageIndex],
       read: !newArr[messageIndex].read,
     };
+
+    // set the messages state to the new array
     setMessages(newArr);
 
+    // update firebase with the new array
     await setDoc(doc(db, "userMessages", userUid), {
       messages: newArr,
     });
   };
 
-  const handleDelete = (message) => {
-    console.log(message);
+  const handleDelete = async (message, email, item) => {
+    // get the user who sent the message
+    const q = query(collection(db, "users"), where("email", "==", email));
+    const querySnap = await getDocs(q);
+    let userUid = null;
+
+    // set the user id
+    querySnap.forEach((doc) => {
+      userUid = doc.data().uid;
+    });
+
+    // add the messages state into a new array
+    let newArr = [...messages];
+
+    // find the edited message
+    const messageIndex = messages.findIndex((item) => item.id === message);
+
+    // set the messages state to the new array
+    newArr.splice(messageIndex, 1);
+    setMessages(newArr);
+
+    // remove the object from the array
+    await updateDoc(doc(db, "userMessages", userUid), {
+      messages: arrayRemove(item),
+    });
   };
 
   return (
@@ -103,7 +137,7 @@ function AdminMessagesScreen({ navigation }) {
               renderRightActions={() => (
                 <>
                   <ListItemDeleteActions
-                    onPress={() => handleDelete(item.id)}
+                    onPress={() => handleDelete(item.id, item.email, item)}
                   />
                   <ListItemReadActions
                     onPress={() => handleRead(item.id, item.email)}
