@@ -63,18 +63,25 @@ function AdminMessagesScreen({ navigation }) {
     // get the user who sent the message
     const q = query(collection(db, "users"), where("email", "==", email));
     const querySnap = await getDocs(q);
-    let userUid = null;
+    let userID = null;
 
     // set the user id
     querySnap.forEach((doc) => {
-      userUid = doc.data().uid;
+      userID = doc.data().uid;
     });
 
+    // get the found users messages
+    const qMsg = await getDoc(doc(db, "userMessages", userID));
+
     // add the messages state into a new array
-    let newArr = [...messages];
+    let newArr = [...qMsg.data().messages];
+    let globalArr = [...messages];
 
     // find the edited message
-    const messageIndex = messages.findIndex((item) => item.id === message);
+    const messageIndex = newArr.findIndex((item) => item.id === message);
+    const globalMessageIndex = messages.findIndex(
+      (item) => item.id === message
+    );
 
     // toggle between read and unread
     newArr[messageIndex] = {
@@ -82,11 +89,17 @@ function AdminMessagesScreen({ navigation }) {
       read: !newArr[messageIndex].read,
     };
 
+    // toggle between read and unread for the global array
+    globalArr[globalMessageIndex] = {
+      ...globalArr[globalMessageIndex],
+      read: !globalArr[globalMessageIndex].read,
+    };
+
     // set the messages state to the new array
-    setMessages(newArr);
+    setMessages(globalArr);
 
     // update firebase with the new array
-    await setDoc(doc(db, "userMessages", userUid), {
+    await setDoc(doc(db, "userMessages", userID), {
       messages: newArr,
     });
   };

@@ -47,7 +47,7 @@ function SignUpScreen() {
               autoCapitalize="words"
               autoCorrect={false}
               name="name"
-              placeholder="Name"
+              placeholder="Full Name"
               textContentType="name"
             />
             <FormField
