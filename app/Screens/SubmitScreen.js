@@ -1,6 +1,11 @@
 import * as Yup from "yup";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+} from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 
 import { AppForm as Form, AppFormField as FormField } from "../components/form";
@@ -20,7 +25,7 @@ const validationSchema = Yup.object().shape({
 
 function SubmitScreen() {
   const tokens = [];
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, isAdmin } = useContext(AuthContext);
   const { sendEmail, sendPushNotification } = useNotifications();
 
   useEffect(() => {
@@ -44,14 +49,42 @@ function SubmitScreen() {
     getToken();
   }, []);
 
-  const handleSubmit = (data) => {
-    sendEmail(data);
-    sendPushNotification({
-      title: "New Message",
-      body: data.name + " has sent you a message",
-      company: data.company ? data.company : "",
-      token: tokens,
-    });
+  const handleSubmit = (data, { resetForm }) => {
+    if (isAdmin) {
+      Alert.alert(
+        "Continue?",
+        "Are you sure you wish to submit a message to your team?",
+        [
+          {
+            text: "No",
+            onPress: () => {
+              return;
+            },
+          },
+          {
+            text: "Yes",
+            onPress: () => {
+              sendEmail(data);
+              sendPushNotification({
+                title: "New Message",
+                body: data.name + " has sent you a message",
+                company: data.company ? data.company : "",
+                token: tokens,
+              });
+              resetForm();
+            },
+          },
+        ]
+      );
+    } else {
+      sendEmail(data);
+      sendPushNotification({
+        title: "New Message",
+        body: data.name + " has sent you a message",
+        company: data.company ? data.company : "",
+        token: tokens,
+      });
+    }
   };
 
   return (
