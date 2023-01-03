@@ -46,7 +46,7 @@ function MessagesScreen({ navigation }) {
       )}
       {messages && !loading && (
         <FlatList
-          data={messages.reverse()}
+          data={messages}
           keyExtractor={(item) => item.id}
           ItemSeparatorComponent={ItemSeparator}
           renderItem={({ item }) => (

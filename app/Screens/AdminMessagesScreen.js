@@ -7,6 +7,7 @@ import {
   FieldValue,
   getDoc,
   getDocs,
+  orderBy,
   query,
   setDoc,
   updateDoc,
@@ -44,7 +45,7 @@ function AdminMessagesScreen({ navigation }) {
     setRefreshing(true);
 
     // get all messages
-    const getMessages = await getDocs(messagesRef);
+    const getMessages = await getDocs(messagesRef, orderBy("date"));
 
     getMessages.forEach((doc) => {
       // push messages into global state
@@ -130,7 +131,7 @@ function AdminMessagesScreen({ navigation }) {
       )}
       {messages && !loading && (
         <FlatList
-          data={messages.reverse()}
+          data={messages}
           keyExtractor={(item) => item.id}
           ItemSeparatorComponent={ItemSeparator}
           onRefresh={() => refreshMessages()}
