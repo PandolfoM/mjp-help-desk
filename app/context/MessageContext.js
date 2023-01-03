@@ -15,8 +15,8 @@ export const MessageContextProvider = ({ children }) => {
     const getMessages = async () => {
       const unsub = await getDocs(messagesRef);
       unsub.forEach((doc) => {
-        if (doc.data) {
-          setMessages(doc.data().messages);
+        if (doc.data()) {
+          setMessages((current) => [...current, ...doc.data().messages]);
         }
       });
     };

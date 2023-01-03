@@ -33,17 +33,26 @@ function AdminMessagesScreen({ navigation }) {
   const { messages, setMessages } = useContext(MessageContext);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-
   const messagesRef = collection(db, "userMessages");
 
   const refreshMessages = async () => {
+    // Clear existing messages so it doesn't duplicate
+    setMessages([]);
+
+    // Loading states
     setLoading(true);
     setRefreshing(true);
+
+    // get all messages
     const getMessages = await getDocs(messagesRef);
+
     getMessages.forEach((doc) => {
-      if (doc.data) {
-        setMessages(doc.data().messages);
+      // push messages into global state
+      if (doc.data()) {
+        setMessages((current) => [...current, ...doc.data().messages]);
       }
+
+      // clear loading
       setLoading(false);
       setRefreshing(false);
     });
