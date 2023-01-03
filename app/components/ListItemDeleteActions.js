@@ -3,7 +3,7 @@ import { View, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
 
-function ListItemDeleteActions({ onPress, markRead }) {
+function ListItemDeleteActions({ onPress }) {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.container}>

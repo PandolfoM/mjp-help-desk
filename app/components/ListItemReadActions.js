@@ -3,15 +3,11 @@ import { View, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
 
-function ListItemReadActions({ onPress }) {
+function ListItemReadActions({ onPress, name = "email-check" }) {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.container}>
-        <MaterialCommunityIcons
-          name="email-check"
-          color={colors.white}
-          size={35}
-        />
+        <MaterialCommunityIcons name={name} color={colors.white} size={35} />
       </View>
     </TouchableWithoutFeedback>
   );

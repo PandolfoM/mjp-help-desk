@@ -164,6 +164,7 @@ function AdminMessagesScreen({ navigation }) {
                   />
                   <ListItemReadActions
                     onPress={() => handleRead(item.id, item.email)}
+                    name={item.read ? "email-remove" : "email-check"}
                   />
                 </>
               )}

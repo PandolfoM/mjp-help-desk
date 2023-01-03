@@ -79,7 +79,6 @@ function DashboardScreen() {
   };
 
   const handleRemove = async (user) => {
-    console.log(user);
     const userRef = doc(db, "users", user);
     if (user === currentUser.uid)
       return setError("You cannot remove yourself as admin!");
