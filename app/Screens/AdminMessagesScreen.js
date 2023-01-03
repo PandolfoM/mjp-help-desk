@@ -1,19 +1,16 @@
-import * as MailComposer from "expo-mail-composer";
 import dayjs from "dayjs";
 import {
   arrayRemove,
   collection,
   doc,
-  FieldValue,
   getDoc,
   getDocs,
-  orderBy,
   query,
   setDoc,
   updateDoc,
   where,
 } from "firebase/firestore";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { View, StyleSheet, FlatList } from "react-native";
 
 import { db } from "../../firebaseConfig";
@@ -45,7 +42,7 @@ function AdminMessagesScreen({ navigation }) {
     setRefreshing(true);
 
     // get all messages
-    const getMessages = await getDocs(messagesRef, orderBy("date", "desc"));
+    const getMessages = await getDocs(messagesRef);
 
     const tempArr = [];
     getMessages.forEach((doc) => {
@@ -54,7 +51,7 @@ function AdminMessagesScreen({ navigation }) {
         tempArr.push(...doc.data().messages);
 
         tempArr.sort((x, y) => {
-          return x.date - y.date;
+          return y.date - x.date;
         });
 
         setMessages(tempArr);

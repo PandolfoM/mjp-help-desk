@@ -21,7 +21,7 @@ export const MessageContextProvider = ({ children }) => {
           tempArr.push(...doc.data().messages);
 
           tempArr.sort((x, y) => {
-            return x.date - y.date;
+            return y.date - x.date;
           });
 
           setMessages(tempArr);
