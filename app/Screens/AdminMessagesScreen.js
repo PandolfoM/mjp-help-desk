@@ -58,15 +58,11 @@ function AdminMessagesScreen({ navigation }) {
         });
 
         setMessages(tempArr);
-
-        setLoading(false);
-        setRefreshing(false);
       }
-
-      // clear loading
-      setLoading(false);
-      setRefreshing(false);
     });
+    // clear loading
+    setLoading(false);
+    setRefreshing(false);
   };
 
   const handleRead = async (message, email) => {
