@@ -25,6 +25,7 @@ const validationSchema = Yup.object().shape({
 
 function SubmitScreen() {
   const tokens = [];
+  const [loading, setLoading] = useState(false);
   const { currentUser, isAdmin } = useContext(AuthContext);
   const { sendEmail, sendPushNotification } = useNotifications();
 
@@ -63,14 +64,16 @@ function SubmitScreen() {
           },
           {
             text: "Yes",
-            onPress: () => {
-              sendEmail(data);
+            onPress: async () => {
+              setLoading(true);
+              await sendEmail(data);
               sendPushNotification({
                 title: "New Message",
                 body: data.name + " has sent you a message",
                 company: data.company ? data.company : "",
                 token: tokens,
               });
+              setLoading(false);
               resetForm();
             },
           },
@@ -89,7 +92,7 @@ function SubmitScreen() {
 
   return (
     <>
-      <ActivityIndicator visible={!currentUser} />
+      <ActivityIndicator visible={loading} />
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={100}
