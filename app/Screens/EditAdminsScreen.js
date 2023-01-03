@@ -1,5 +1,5 @@
 import { FlatList, StyleSheet } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Screen from "../components/Screen";
 import Text from "../components/Text";
 import TextInput from "../components/TextInput";
@@ -20,6 +20,7 @@ import Icon from "../components/Icon";
 import colors from "../config/colors";
 import ListItemDeleteActions from "../components/ListItemDeleteActions";
 import ErrorMessage from "../components/ErrorMessage";
+import { AuthContext } from "../auth/context";
 
 function DashboardScreen() {
   const [admins, setAdmins] = useState([]);
@@ -27,6 +28,7 @@ function DashboardScreen() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
     const getAdmins = async () => {
@@ -77,19 +79,22 @@ function DashboardScreen() {
   };
 
   const handleRemove = async (user) => {
+    console.log(user);
     const userRef = doc(db, "users", user);
-
-    if (admins.length > 1) {
-      await updateDoc(userRef, {
-        admin: false,
-      });
-
-      setAdmins((current) => current.filter((admin) => admin.uid !== user));
-    } else {
-      setError("There must be at least 1 admin!");
-      setEmail("");
-      setUser(null);
+    if (user === currentUser.uid)
+      return setError("You cannot remove yourself as admin!");
+    if (admins.length <= 1) {
+      return setError("There must be at least 1 admin!");
     }
+
+    await updateDoc(userRef, {
+      admin: false,
+    });
+
+    setAdmins((current) => current.filter((admin) => admin.uid !== user));
+
+    setEmail("");
+    setUser(null);
   };
 
   const handleAdd = async (user) => {
