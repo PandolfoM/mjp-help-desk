@@ -18,6 +18,7 @@ const DashboardNavigator = ({ navigation }) => {
 
   return (
     <Tab.Navigator
+      initialRouteName="AdminMessagesScreen"
       screenOptions={{
         tabBarShowLabel: false,
         headerRight: () => (
