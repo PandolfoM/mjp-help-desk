@@ -11,12 +11,20 @@ export const MessageContextProvider = ({ children }) => {
   const [unreadCount, setUnreadCount] = useState(0);
   const messagesRef = collection(db, "userMessages");
 
+  const tempArr = [];
+
   useEffect(() => {
     const getMessages = async () => {
       const unsub = await getDocs(messagesRef);
       unsub.forEach((doc) => {
         if (doc.data()) {
-          setMessages((current) => [...current, ...doc.data().messages]);
+          tempArr.push(...doc.data().messages);
+
+          tempArr.sort((x, y) => {
+            return x.date - y.date;
+          });
+
+          setMessages(tempArr);
         }
       });
     };

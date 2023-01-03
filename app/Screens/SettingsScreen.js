@@ -123,7 +123,6 @@ function SettingsScreen() {
           .then(() => setPasswordErr(""))
           .catch((e) => {
             let code = JSON.stringify(e.code);
-            console.log(code);
             let requiresLogin = code.includes("requires-recent-login");
             requiresLogin && setPasswordErr("Login again and try again");
             !requiresLogin && !alreadyInUse && setPasswordErr(code);

@@ -45,12 +45,22 @@ function AdminMessagesScreen({ navigation }) {
     setRefreshing(true);
 
     // get all messages
-    const getMessages = await getDocs(messagesRef, orderBy("date"));
+    const getMessages = await getDocs(messagesRef, orderBy("date", "desc"));
 
+    const tempArr = [];
     getMessages.forEach((doc) => {
       // push messages into global state
       if (doc.data()) {
-        setMessages((current) => [...current, ...doc.data().messages]);
+        tempArr.push(...doc.data().messages);
+
+        tempArr.sort((x, y) => {
+          return x.date - y.date;
+        });
+
+        setMessages(tempArr);
+
+        setLoading(false);
+        setRefreshing(false);
       }
 
       // clear loading
