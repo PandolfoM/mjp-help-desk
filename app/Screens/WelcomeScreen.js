@@ -8,7 +8,6 @@ import routes from "../navigation/routes";
 function WelcomeScreen({ navigation }) {
   return (
     <ImageBackground
-      blurRadius={10}
       style={styles.background}
       source={require("../assets/background.jpg")}>
       <View style={styles.logoContainer}>
