@@ -24,34 +24,9 @@ const validationSchema = Yup.object().shape({
 });
 
 function SubmitScreen() {
-  // const [tokens, setTokens] = useState([]);
   const [loading, setLoading] = useState(false);
   const { currentUser, isAdmin } = useContext(AuthContext);
   const { sendEmail, sendPushNotification } = useNotifications();
-
-  // useEffect(() => {
-  //   const getToken = async () => {
-  //     const q = query(collection(db, "users"), where("admin", "==", true));
-
-  //     try {
-  //       const querySnapshot = await getDocs(q);
-  //       querySnapshot.forEach((doc) => {
-  //         setTokens((current) => [
-  //           ...current,
-  //           ...doc.data().notificationTokens,
-  //         ]);
-  //       });
-  //     } catch (e) {
-  //       console.log(e);
-  //     }
-
-  //     return () => {
-  //       unsub();
-  //     };
-  //   };
-
-  //   getToken();
-  // }, []);
 
   const handleSubmit = async (data, { resetForm }) => {
     setLoading(true);
