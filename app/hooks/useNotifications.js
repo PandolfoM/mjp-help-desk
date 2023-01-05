@@ -1,21 +1,25 @@
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   addDoc,
   arrayUnion,
   collection,
   doc,
+  getDocs,
+  query,
   Timestamp,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import uuid from "react-native-uuid";
 
 import { db } from "../../firebaseConfig";
-import { AuthContext } from "./context";
+import { AuthContext } from "../auth/context";
 
 export default useNotifications = (notificationListener) => {
   const { currentUser } = useContext(AuthContext);
+  const [tokens, setTokens] = useState([]);
 
   useEffect(() => {
     registerForNotifications();
@@ -24,6 +28,30 @@ export default useNotifications = (notificationListener) => {
       Notifications.addNotificationResponseReceivedListener(
         notificationListener
       );
+  }, []);
+
+  useEffect(() => {
+    const getToken = async () => {
+      const q = query(collection(db, "users"), where("admin", "==", true));
+
+      try {
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          setTokens((current) => [
+            ...current,
+            ...doc.data().notificationTokens,
+          ]);
+        });
+      } catch (e) {
+        console.log(e);
+      }
+
+      return () => {
+        unsub();
+      };
+    };
+
+    getToken();
   }, []);
 
   const registerForNotifications = async () => {
@@ -44,7 +72,7 @@ export default useNotifications = (notificationListener) => {
 
       token = (await Notifications.getExpoPushTokenAsync()).data;
       await updateDoc(doc(db, "users", currentUser.uid), {
-        notificationToken: token,
+        notificationTokens: arrayUnion(token),
       });
     }
   };
@@ -79,11 +107,11 @@ export default useNotifications = (notificationListener) => {
     }
   };
 
-  const sendPushNotification = ({ token, title, body, company }) => {
-    token.forEach((t) => {
+  const sendPushNotification = ({ title, body, company }) => {
+    tokens.forEach((t) => {
       fetch("https://exp.host/--/api/v2/push/send", {
         body: JSON.stringify({
-          to: token,
+          to: t,
           title: title,
           subtitle: company,
           body: body,

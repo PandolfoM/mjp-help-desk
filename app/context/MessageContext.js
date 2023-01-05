@@ -1,3 +1,4 @@
+import { getBadgeCountAsync, setBadgeCountAsync } from "expo-notifications";
 import { collection, getDocs } from "firebase/firestore";
 import { createContext, useContext, useEffect, useState } from "react";
 import { db } from "../../firebaseConfig";
@@ -41,6 +42,10 @@ export const MessageContextProvider = ({ children }) => {
     });
     setUnreadCount(count);
   }, [messages]);
+
+  useEffect(() => {
+    setBadgeCountAsync(unreadCount);
+  }, [unreadCount]);
 
   return (
     <MessageContext.Provider

@@ -12,7 +12,7 @@ import { AppForm as Form, AppFormField as FormField } from "../components/form";
 import { AuthContext } from "../auth/context";
 import { db } from "../../firebaseConfig";
 import ActivityIndicator from "../components/ActivityIndicator";
-import useNotifications from "../auth/useNotifications";
+import useNotifications from "../hooks/useNotifications";
 import SubmitButton from "../components/form/SubmitButton";
 import Screen from "../components/Screen";
 
@@ -24,33 +24,37 @@ const validationSchema = Yup.object().shape({
 });
 
 function SubmitScreen() {
-  const tokens = [];
+  // const [tokens, setTokens] = useState([]);
   const [loading, setLoading] = useState(false);
   const { currentUser, isAdmin } = useContext(AuthContext);
   const { sendEmail, sendPushNotification } = useNotifications();
 
-  useEffect(() => {
-    const getToken = async () => {
-      const q = query(collection(db, "users"), where("admin", "==", true));
+  // useEffect(() => {
+  //   const getToken = async () => {
+  //     const q = query(collection(db, "users"), where("admin", "==", true));
 
-      try {
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((doc) => {
-          tokens.push(doc.data().notificationToken);
-        });
-      } catch (e) {
-        console.log(e);
-      }
+  //     try {
+  //       const querySnapshot = await getDocs(q);
+  //       querySnapshot.forEach((doc) => {
+  //         setTokens((current) => [
+  //           ...current,
+  //           ...doc.data().notificationTokens,
+  //         ]);
+  //       });
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
 
-      return () => {
-        unsub();
-      };
-    };
+  //     return () => {
+  //       unsub();
+  //     };
+  //   };
 
-    getToken();
-  }, []);
+  //   getToken();
+  // }, []);
 
-  const handleSubmit = (data, { resetForm }) => {
+  const handleSubmit = async (data, { resetForm }) => {
+    setLoading(true);
     if (isAdmin) {
       Alert.alert(
         "Continue?",
@@ -65,14 +69,12 @@ function SubmitScreen() {
           {
             text: "Yes",
             onPress: async () => {
-              setLoading(true);
-              await sendEmail(data);
               sendPushNotification({
                 title: "New Message",
                 body: data.name + " has sent you a message",
                 company: data.company ? data.company : "",
-                token: tokens,
               });
+              await sendEmail(data);
               setLoading(false);
               resetForm();
             },
@@ -80,13 +82,14 @@ function SubmitScreen() {
         ]
       );
     } else {
-      sendEmail(data);
       sendPushNotification({
         title: "New Message",
         body: data.name + " has sent you a message",
         company: data.company ? data.company : "",
-        token: tokens,
       });
+      await sendEmail(data);
+      setLoading(false);
+      resetForm();
     }
   };
 

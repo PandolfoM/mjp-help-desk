@@ -1,17 +1,18 @@
+import * as Notifications from "expo-notifications";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
-  updateEmail,
   updateProfile,
 } from "firebase/auth/react-native";
 import { useContext } from "react";
-import { auth, db } from "../../firebaseConfig";
+import { arrayRemove, doc, setDoc, updateDoc } from "firebase/firestore";
+
 import { AuthContext } from "./context";
-import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from "../../firebaseConfig";
 
 export default useAuth = () => {
-  const { setCurrentUser } = useContext(AuthContext);
+  const { currentUser, setCurrentUser } = useContext(AuthContext);
 
   const signIn = ({ email, password }) => {
     signInWithEmailAndPassword(auth, email, password)
@@ -39,7 +40,9 @@ export default useAuth = () => {
           admin: false,
         });
 
-        await setDoc(doc(db, "userMessages", res.user.uid), {});
+        await setDoc(doc(db, "userMessages", res.user.uid), {
+          messages: [],
+        });
       } catch (e) {
         console.error(e);
       }
@@ -49,8 +52,12 @@ export default useAuth = () => {
     }
   };
 
-  const logOut = () => {
+  const logOut = async () => {
     setCurrentUser(undefined);
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+    await updateDoc(doc(db, "users", currentUser.uid), {
+      notificationTokens: arrayRemove(token),
+    });
     signOut(auth);
   };
 
