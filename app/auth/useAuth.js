@@ -38,6 +38,7 @@ export default useAuth = () => {
           displayName: name,
           email,
           admin: false,
+          notificationTokens: [],
         });
 
         await setDoc(doc(db, "userMessages", res.user.uid), {

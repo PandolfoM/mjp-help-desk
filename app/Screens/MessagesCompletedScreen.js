@@ -15,6 +15,7 @@ import routes from "../navigation/routes";
 
 function MessagesCompletedScreen({ navigation }) {
   const [messages, setMessages] = useState([]);
+  const [completedMessages, setCompletedMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isCompleted, setIsCompleted] = useState(false);
   const { currentUser } = useContext(AuthContext);
@@ -38,41 +39,40 @@ function MessagesCompletedScreen({ navigation }) {
   }, [currentUser.uid]);
 
   useEffect(() => {
-    for (let i = 0; i < messages.length; i++) {
-      if (messages[i].completed) {
-        setIsCompleted(true);
+    messages.forEach((i) => {
+      setCompletedMessages([]);
+      if (i.completed) {
+        setCompletedMessages((current) => [...current, i]);
       }
-    }
+    });
   }, [messages]);
+
+  useEffect(() => {
+    console.log(completedMessages);
+  }, [completedMessages]);
 
   return (
     <Screen style={styles.screen} disableScroll>
       <ActivityIndicator visible={loading} />
-      {!isCompleted && (
+      {completedMessages.length < 1 && (
         <View style={styles.noMessages}>
           <Text style={styles.text}>No Messages</Text>
         </View>
       )}
-      {messages.length >= 1 && isCompleted && (
+      {completedMessages.length >= 1 && (
         <FlatList
-          data={messages}
+          data={completedMessages}
           keyExtractor={(item) => item.id}
           ItemSeparatorComponent={ItemSeparator}
           renderItem={({ item }) => (
-            <>
-              {item.completed === true && (
-                <ListItem
-                  title={item.company}
-                  subtitle={dayjs(new Date(item.date * 1000)).format(
-                    "MM/DD/YYYY, h:mm:ss A"
-                  )}
-                  clickable
-                  onPress={() =>
-                    navigation.navigate(routes.MESSAGE_DETAILS, item)
-                  }
-                />
+            <ListItem
+              title={item.company}
+              subtitle={dayjs(new Date(item.date * 1000)).format(
+                "MM/DD/YYYY, h:mm:ss A"
               )}
-            </>
+              clickable
+              onPress={() => navigation.navigate(routes.MESSAGE_DETAILS, item)}
+            />
           )}
         />
       )}

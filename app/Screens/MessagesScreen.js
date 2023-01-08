@@ -15,6 +15,7 @@ import routes from "../navigation/routes";
 
 function MessagesScreen({ navigation }) {
   const [messages, setMessages] = useState([]);
+  const [outgoingMessages, setOutgoingMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const { currentUser } = useContext(AuthContext);
 
@@ -36,34 +37,37 @@ function MessagesScreen({ navigation }) {
     currentUser.uid && getMessages();
   }, [currentUser.uid]);
 
+  useEffect(() => {
+    messages.forEach((i) => {
+      setOutgoingMessages([]);
+      if (i.completed === false) {
+        setOutgoingMessages((current) => [...current, i]);
+      }
+    });
+  }, [messages]);
+
   return (
     <Screen style={styles.screen} disableScroll>
       <ActivityIndicator visible={loading} />
-      {messages.length < 1 && (
+      {outgoingMessages.length < 1 && (
         <View style={styles.noMessages}>
           <Text style={styles.text}>No Messages</Text>
         </View>
       )}
-      {messages.length >= 1 && (
+      {outgoingMessages.length >= 1 && (
         <FlatList
-          data={messages}
+          data={outgoingMessages}
           keyExtractor={(item) => item.id}
           ItemSeparatorComponent={ItemSeparator}
           renderItem={({ item }) => (
-            <>
-              {item.completed === false && (
-                <ListItem
-                  title={item.company}
-                  subtitle={dayjs(new Date(item.date * 1000)).format(
-                    "MM/DD/YYYY, h:mm:ss A"
-                  )}
-                  clickable
-                  onPress={() =>
-                    navigation.navigate(routes.MESSAGE_DETAILS, item)
-                  }
-                />
+            <ListItem
+              title={item.company}
+              subtitle={dayjs(new Date(item.date * 1000)).format(
+                "MM/DD/YYYY, h:mm:ss A"
               )}
-            </>
+              clickable
+              onPress={() => navigation.navigate(routes.MESSAGE_DETAILS, item)}
+            />
           )}
         />
       )}

@@ -26,6 +26,7 @@ import { MessageContext } from "../context/MessageContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import ListItemReadActions from "../components/ListItemReadActions";
 import ListItemDeleteActions from "../components/ListItemDeleteActions";
+import ListItemCompletedActions from "../components/ListItemCompletedActions";
 
 function AdminMessagesScreen({ navigation }) {
   const { messages, setMessages } = useContext(MessageContext);
@@ -107,6 +108,53 @@ function AdminMessagesScreen({ navigation }) {
     });
   };
 
+  const handleCompleted = async (message, email) => {
+    // get the user who sent the message
+    const q = query(collection(db, "users"), where("email", "==", email));
+    const querySnap = await getDocs(q);
+    let userID = null;
+
+    // set the user id
+    querySnap.forEach((doc) => {
+      userID = doc.data().uid;
+    });
+
+    // get the found users messages
+    const qMsg = await getDoc(doc(db, "userMessages", userID));
+
+    // add the messages state into a new array
+    let newArr = [...qMsg.data().messages];
+    let globalArr = [...messages];
+
+    // find the edited message
+    const messageIndex = newArr.findIndex((item) => item.id === message);
+    const globalMessageIndex = messages.findIndex(
+      (item) => item.id === message
+    );
+
+    // set read and completed true
+    newArr[messageIndex] = {
+      ...newArr[messageIndex],
+      read: true,
+      completed: true,
+    };
+
+    // set read and completed true for the global array
+    globalArr[globalMessageIndex] = {
+      ...globalArr[globalMessageIndex],
+      read: true,
+      completed: true,
+    };
+
+    // set the messages state to the new array
+    setMessages(globalArr);
+
+    // update firebase with the new array
+    await setDoc(doc(db, "userMessages", userID), {
+      messages: newArr,
+    });
+  };
+
   const handleDelete = async (message, email, item) => {
     // get the user who sent the message
     const q = query(collection(db, "users"), where("email", "==", email));
@@ -164,6 +212,9 @@ function AdminMessagesScreen({ navigation }) {
                 <>
                   <ListItemDeleteActions
                     onPress={() => handleDelete(item.id, item.email, item)}
+                  />
+                  <ListItemCompletedActions
+                    onPress={() => handleCompleted(item.id, item.email)}
                   />
                   <ListItemReadActions
                     onPress={() => handleRead(item.id, item.email)}

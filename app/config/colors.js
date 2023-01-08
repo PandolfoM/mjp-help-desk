@@ -7,4 +7,5 @@ export default {
   white: "#fff",
   black: "#000",
   danger: "#ff5252",
+  success: "#4eda71",
 };
