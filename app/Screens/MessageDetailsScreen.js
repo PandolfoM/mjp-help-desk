@@ -4,6 +4,7 @@ import React, { useContext } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { AuthContext } from "../auth/context";
+import ItemSeparator from "../components/ItemSeparator";
 import AppText from "../components/Text";
 import colors from "../config/colors";
 import defaultStyles from "../config/styles";
@@ -68,6 +69,27 @@ function MessageDetailsScreen({ route }) {
             {message.message}
           </AppText>
         </View>
+
+        {message.completed && (
+          <>
+            <View style={styles.textContainer}>
+              <AppText style={[styles.date, { color: colors.success }]}>
+                Completed:{" "}
+                {dayjs(new Date(message.completedDate * 1000)).format(
+                  "MM/DD/YYYY,  h:mm:ss A"
+                )}
+              </AppText>
+            </View>
+
+            <View style={styles.textContainer}>
+              <AppText>Note:</AppText>
+              <AppText
+                style={[defaultStyles.textInput, styles.text, styles.message]}>
+                {message.note}
+              </AppText>
+            </View>
+          </>
+        )}
       </ScrollView>
     </View>
   );

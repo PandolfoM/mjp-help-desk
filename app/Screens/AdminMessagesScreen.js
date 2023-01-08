@@ -7,6 +7,7 @@ import {
   getDocs,
   query,
   setDoc,
+  Timestamp,
   updateDoc,
   where,
 } from "firebase/firestore";
@@ -119,50 +120,71 @@ function AdminMessagesScreen({ navigation }) {
   };
 
   const handleCompleted = async (message, email) => {
-    // get the user who sent the message
-    const q = query(collection(db, "users"), where("email", "==", email));
-    const querySnap = await getDocs(q);
-    let userID = null;
+    Alert.prompt("Continue?", "Leave a note for the client?", [
+      {
+        text: "Cancel",
+        onPress: () => {
+          return;
+        },
+      },
+      {
+        text: "Send",
+        onPress: (note) => {
+          continueCompleted(message, email, note);
+        },
+      },
+    ]);
 
-    // set the user id
-    querySnap.forEach((doc) => {
-      userID = doc.data().uid;
-    });
+    const continueCompleted = async (message, email, note) => {
+      // get the user who sent the message
+      const q = query(collection(db, "users"), where("email", "==", email));
+      const querySnap = await getDocs(q);
+      let userID = null;
 
-    // get the found users messages
-    const qMsg = await getDoc(doc(db, "userMessages", userID));
+      // set the user id
+      querySnap.forEach((doc) => {
+        userID = doc.data().uid;
+      });
 
-    // add the messages state into a new array
-    let newArr = [...qMsg.data().messages];
-    let globalArr = [...messages];
+      // get the found users messages
+      const qMsg = await getDoc(doc(db, "userMessages", userID));
 
-    // find the edited message
-    const messageIndex = newArr.findIndex((item) => item.id === message);
-    const globalMessageIndex = messages.findIndex(
-      (item) => item.id === message
-    );
+      // add the messages state into a new array
+      let newArr = [...qMsg.data().messages];
+      let globalArr = [...messages];
 
-    // set read and completed true
-    newArr[messageIndex] = {
-      ...newArr[messageIndex],
-      read: true,
-      completed: true,
+      // find the edited message
+      const messageIndex = newArr.findIndex((item) => item.id === message);
+      const globalMessageIndex = messages.findIndex(
+        (item) => item.id === message
+      );
+
+      // set read and completed true
+      newArr[messageIndex] = {
+        ...newArr[messageIndex],
+        read: true,
+        completed: true,
+        note: note,
+        completedDate: Timestamp.now().seconds,
+      };
+
+      // set read and completed true for the global array
+      globalArr[globalMessageIndex] = {
+        ...globalArr[globalMessageIndex],
+        read: true,
+        completed: true,
+        note: note,
+        completedDate: Timestamp.now().seconds,
+      };
+
+      // set the messages state to the new array
+      setMessages(globalArr);
+
+      // update firebase with the new array
+      await setDoc(doc(db, "userMessages", userID), {
+        messages: newArr,
+      });
     };
-
-    // set read and completed true for the global array
-    globalArr[globalMessageIndex] = {
-      ...globalArr[globalMessageIndex],
-      read: true,
-      completed: true,
-    };
-
-    // set the messages state to the new array
-    setMessages(globalArr);
-
-    // update firebase with the new array
-    await setDoc(doc(db, "userMessages", userID), {
-      messages: newArr,
-    });
   };
 
   const handleDelete = async (message, email, item) => {

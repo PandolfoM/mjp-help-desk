@@ -1,6 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import { View, StyleSheet, FlatList } from "react-native";
-import { doc, onSnapshot } from "firebase/firestore";
+import {
+  arrayRemove,
+  collection,
+  doc,
+  getDocs,
+  onSnapshot,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import dayjs from "dayjs";
 import ItemSeparator from "../components/ItemSeparator";
 import ListItem from "../components/ListItem";
@@ -12,6 +21,7 @@ import Text from "../components/Text";
 import colors from "../config/colors";
 import ActivityIndicator from "../components/ActivityIndicator";
 import routes from "../navigation/routes";
+import ListItemDeleteActions from "../components/ListItemDeleteActions";
 
 function MessagesCompletedScreen({ navigation }) {
   const [messages, setMessages] = useState([]);
@@ -46,6 +56,33 @@ function MessagesCompletedScreen({ navigation }) {
     });
   }, [messages]);
 
+  const handleDelete = async (message, email, item) => {
+    // get the user who sent the message
+    const q = query(collection(db, "users"), where("email", "==", email));
+    const querySnap = await getDocs(q);
+    let userUid = null;
+
+    // set the user id
+    querySnap.forEach((doc) => {
+      userUid = doc.data().uid;
+    });
+
+    // add the messages state into a new array
+    let newArr = [...messages];
+
+    // find the edited message
+    const messageIndex = messages.findIndex((item) => item.id === message);
+
+    // set the messages state to the new array
+    newArr.splice(messageIndex, 1);
+    setMessages(newArr);
+
+    // remove the object from the array
+    await updateDoc(doc(db, "userMessages", userUid), {
+      messages: arrayRemove(item),
+    });
+  };
+
   return (
     <Screen style={styles.screen} disableScroll>
       <ActivityIndicator visible={loading} />
@@ -67,6 +104,11 @@ function MessagesCompletedScreen({ navigation }) {
               )}
               clickable
               onPress={() => navigation.navigate(routes.MESSAGE_DETAILS, item)}
+              renderRightActions={() => (
+                <ListItemDeleteActions
+                  onPress={() => handleDelete(item.id, item.email, item)}
+                />
+              )}
             />
           )}
         />
