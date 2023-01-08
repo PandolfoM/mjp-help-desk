@@ -38,8 +38,8 @@ function MessagesScreen({ navigation }) {
   }, [currentUser.uid]);
 
   useEffect(() => {
+    setOutgoingMessages([]);
     messages.forEach((i) => {
-      setOutgoingMessages([]);
       if (i.completed === false) {
         setOutgoingMessages((current) => [...current, i]);
       }

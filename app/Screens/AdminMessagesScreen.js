@@ -10,8 +10,8 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import React, { useContext, useState } from "react";
-import { View, StyleSheet, FlatList } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { View, StyleSheet, FlatList, Alert } from "react-native";
 
 import { db } from "../../firebaseConfig";
 import ActivityIndicator from "../components/ActivityIndicator";
@@ -30,9 +30,19 @@ import ListItemCompletedActions from "../components/ListItemCompletedActions";
 
 function AdminMessagesScreen({ navigation }) {
   const { messages, setMessages } = useContext(MessageContext);
+  const [outgoingMessages, setOutgoingMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const messagesRef = collection(db, "userMessages");
+
+  useEffect(() => {
+    setOutgoingMessages([]);
+    messages.forEach((i) => {
+      if (i.completed === false) {
+        setOutgoingMessages((current) => [...current, i]);
+      }
+    });
+  }, [messages]);
 
   const refreshMessages = async () => {
     // Clear existing messages so it doesn't duplicate
@@ -156,36 +166,57 @@ function AdminMessagesScreen({ navigation }) {
   };
 
   const handleDelete = async (message, email, item) => {
-    // get the user who sent the message
-    const q = query(collection(db, "users"), where("email", "==", email));
-    const querySnap = await getDocs(q);
-    let userUid = null;
+    Alert.alert(
+      "Continue?",
+      "Are you sure you wish to delete the message before marking as completed?",
+      [
+        {
+          text: "No",
+          onPress: () => {
+            return;
+          },
+        },
+        {
+          text: "Yes",
+          onPress: () => {
+            continueDelete(message, email, item);
+          },
+        },
+      ]
+    );
 
-    // set the user id
-    querySnap.forEach((doc) => {
-      userUid = doc.data().uid;
-    });
+    const continueDelete = async () => {
+      // get the user who sent the message
+      const q = query(collection(db, "users"), where("email", "==", email));
+      const querySnap = await getDocs(q);
+      let userUid = null;
 
-    // add the messages state into a new array
-    let newArr = [...messages];
+      // set the user id
+      querySnap.forEach((doc) => {
+        userUid = doc.data().uid;
+      });
 
-    // find the edited message
-    const messageIndex = messages.findIndex((item) => item.id === message);
+      // add the messages state into a new array
+      let newArr = [...messages];
 
-    // set the messages state to the new array
-    newArr.splice(messageIndex, 1);
-    setMessages(newArr);
+      // find the edited message
+      const messageIndex = messages.findIndex((item) => item.id === message);
 
-    // remove the object from the array
-    await updateDoc(doc(db, "userMessages", userUid), {
-      messages: arrayRemove(item),
-    });
+      // set the messages state to the new array
+      newArr.splice(messageIndex, 1);
+      setMessages(newArr);
+
+      // remove the object from the array
+      await updateDoc(doc(db, "userMessages", userUid), {
+        messages: arrayRemove(item),
+      });
+    };
   };
 
   return (
     <Screen disableScroll style={styles.container}>
       <ActivityIndicator visible={loading} />
-      {messages.length < 1 && (
+      {outgoingMessages.length < 1 && (
         <View style={styles.noMessages}>
           <Text style={styles.text}>No Messages</Text>
           <TouchableOpacity onPress={refreshMessages}>
@@ -193,9 +224,9 @@ function AdminMessagesScreen({ navigation }) {
           </TouchableOpacity>
         </View>
       )}
-      {messages.length >= 1 && (
+      {outgoingMessages.length >= 1 && (
         <FlatList
-          data={messages}
+          data={outgoingMessages}
           keyExtractor={(item) => item.id}
           ItemSeparatorComponent={ItemSeparator}
           onRefresh={() => refreshMessages()}

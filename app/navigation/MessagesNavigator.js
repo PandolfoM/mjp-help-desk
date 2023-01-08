@@ -1,5 +1,4 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import MessageDetailsScreen from "../Screens/MessageDetailsScreen";
 import MessagesCompletedNavigator from "./MessagesCompletedNavigator";
 import MessagesOutgoingNavigator from "./MessagesOutgoingNavigator";
 

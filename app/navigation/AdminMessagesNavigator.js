@@ -1,18 +1,22 @@
-import AdminMessagesScreen from "../Screens/AdminMessagesScreen";
-import MessageDetailsScreen from "../Screens/MessageDetailsScreen";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import AdminMsgsCompletedNavigator from "./AdminMsgsCompletedNavigator";
+import AdminMsgsOutgoingNavigator from "./AdminMsgsOutgoingNavigator";
 
-const {
-  createNativeStackNavigator,
-} = require("@react-navigation/native-stack");
-
-const Stack = createNativeStackNavigator();
+const Tab = createMaterialTopTabNavigator();
 
 const AdminMessagesNavigator = () => (
-  <Stack.Navigator
-    screenOptions={{ presentation: "modal", headerShown: false }}>
-    <Stack.Screen name="AdminMessages" component={AdminMessagesScreen} />
-    <Stack.Screen name="MessageDetails" component={MessageDetailsScreen} />
-  </Stack.Navigator>
+  <Tab.Navigator screenOptions={{ presentation: "modal", headerShown: false }}>
+    <Tab.Screen
+      options={{ tabBarLabel: "Outgoing" }}
+      name="AdminMsgsOutgoingNavigator"
+      component={AdminMsgsOutgoingNavigator}
+    />
+    <Tab.Screen
+      options={{ tabBarLabel: "Completed" }}
+      name="AdminMsgsCompletedNavigator"
+      component={AdminMsgsCompletedNavigator}
+    />
+  </Tab.Navigator>
 );
 
 export default AdminMessagesNavigator;

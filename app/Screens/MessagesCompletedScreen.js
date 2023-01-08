@@ -17,7 +17,6 @@ function MessagesCompletedScreen({ navigation }) {
   const [messages, setMessages] = useState([]);
   const [completedMessages, setCompletedMessages] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isCompleted, setIsCompleted] = useState(false);
   const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
@@ -39,17 +38,13 @@ function MessagesCompletedScreen({ navigation }) {
   }, [currentUser.uid]);
 
   useEffect(() => {
+    setCompletedMessages([]);
     messages.forEach((i) => {
-      setCompletedMessages([]);
       if (i.completed) {
         setCompletedMessages((current) => [...current, i]);
       }
     });
   }, [messages]);
-
-  useEffect(() => {
-    console.log(completedMessages);
-  }, [completedMessages]);
 
   return (
     <Screen style={styles.screen} disableScroll>
