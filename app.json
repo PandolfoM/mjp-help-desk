@@ -2,7 +2,7 @@
   "expo": {
     "name": "MJP Systems",
     "slug": "mjp-help",
-    "version": "0.1.6",
+    "version": "0.1.7",
     "orientation": "portrait",
     "icon": "./app/assets/icon.png",
     "userInterfaceStyle": "light",
@@ -18,7 +18,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.pandolfom.mjphelp",
-      "buildNumber": "6"
+      "buildNumber": "7"
     },
     "android": {
       "adaptiveIcon": {
