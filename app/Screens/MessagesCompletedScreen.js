@@ -13,9 +13,10 @@ import colors from "../config/colors";
 import ActivityIndicator from "../components/ActivityIndicator";
 import routes from "../navigation/routes";
 
-function MessagesScreen({ navigation }) {
+function MessagesCompletedScreen({ navigation }) {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isCompleted, setIsCompleted] = useState(false);
   const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
@@ -23,7 +24,7 @@ function MessagesScreen({ navigation }) {
       const unsub = onSnapshot(
         doc(db, "userMessages", currentUser.uid),
         (doc) => {
-          if (doc.data) {
+          if (doc.data()) {
             setMessages(doc.data().messages);
           }
           setLoading(false);
@@ -36,22 +37,30 @@ function MessagesScreen({ navigation }) {
     currentUser.uid && getMessages();
   }, [currentUser.uid]);
 
+  useEffect(() => {
+    for (let i = 0; i < messages.length; i++) {
+      if (messages[i].completed) {
+        setIsCompleted(true);
+      }
+    }
+  }, [messages]);
+
   return (
     <Screen style={styles.screen} disableScroll>
       <ActivityIndicator visible={loading} />
-      {messages.length < 1 && (
+      {!isCompleted && (
         <View style={styles.noMessages}>
           <Text style={styles.text}>No Messages</Text>
         </View>
       )}
-      {messages.length >= 1 && (
+      {messages.length >= 1 && isCompleted && (
         <FlatList
           data={messages}
           keyExtractor={(item) => item.id}
           ItemSeparatorComponent={ItemSeparator}
           renderItem={({ item }) => (
             <>
-              {item.completed === false && (
+              {item.completed === true && (
                 <ListItem
                   title={item.company}
                   subtitle={dayjs(new Date(item.date * 1000)).format(
@@ -87,4 +96,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MessagesScreen;
+export default MessagesCompletedScreen;

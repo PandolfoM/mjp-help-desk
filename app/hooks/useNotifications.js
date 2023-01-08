@@ -100,6 +100,7 @@ export default useNotifications = (notificationListener) => {
           message: message,
           date: Timestamp.now().seconds,
           read: false,
+          completed: false,
         }),
       });
     } catch (e) {

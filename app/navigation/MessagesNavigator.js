@@ -1,18 +1,23 @@
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import MessageDetailsScreen from "../Screens/MessageDetailsScreen";
+import MessagesCompletedNavigator from "./MessagesCompletedNavigator";
+import MessagesOutgoingNavigator from "./MessagesOutgoingNavigator";
 
-const {
-  createNativeStackNavigator,
-} = require("@react-navigation/native-stack");
-const { default: MessagesScreen } = require("../Screens/MessagesScreen");
-
-const Stack = createNativeStackNavigator();
+const Tab = createMaterialTopTabNavigator();
 
 const MessagesNavigator = () => (
-  <Stack.Navigator
-    screenOptions={{ presentation: "modal", headerShown: false }}>
-    <Stack.Screen name="Messages" component={MessagesScreen} />
-    <Stack.Screen name="MessageDetails" component={MessageDetailsScreen} />
-  </Stack.Navigator>
+  <Tab.Navigator screenOptions={{ presentation: "modal", headerShown: false }}>
+    <Tab.Screen
+      options={{ tabBarLabel: "Outgoing" }}
+      name="MessagesOutgoingNavigator"
+      component={MessagesOutgoingNavigator}
+    />
+    <Tab.Screen
+      options={{ tabBarLabel: "Completed" }}
+      name="MessagesCompletedNavigator"
+      component={MessagesCompletedNavigator}
+    />
+  </Tab.Navigator>
 );
 
 export default MessagesNavigator;

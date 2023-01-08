@@ -137,7 +137,7 @@ function AdminMessagesScreen({ navigation }) {
   return (
     <Screen disableScroll style={styles.container}>
       <ActivityIndicator visible={loading} />
-      {!messages && !loading && (
+      {messages.length < 1 && (
         <View style={styles.noMessages}>
           <Text style={styles.text}>No Messages</Text>
           <TouchableOpacity onPress={refreshMessages}>
@@ -145,7 +145,7 @@ function AdminMessagesScreen({ navigation }) {
           </TouchableOpacity>
         </View>
       )}
-      {messages && !loading && (
+      {messages.length >= 1 && (
         <FlatList
           data={messages}
           keyExtractor={(item) => item.id}
