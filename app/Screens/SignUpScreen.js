@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Image,
@@ -14,6 +14,7 @@ import Screen from "../components/Screen";
 import Text from "../components/Text";
 import colors from "../config/colors";
 import useAuth from "../auth/useAuth";
+import ActivityIndicator from "../components/ActivityIndicator";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().min(1).label("Name"),
@@ -22,10 +23,13 @@ const validationSchema = Yup.object().shape({
 });
 
 function SignUpScreen({ navigation }) {
+  const [loading, setLoading] = useState(false);
   const { signUp } = useAuth();
 
   const handleSubmit = async (values) => {
+    setLoading(true);
     await signUp(values);
+    setLoading(false);
   };
 
   return (
@@ -33,6 +37,7 @@ function SignUpScreen({ navigation }) {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={100}
       style={{ flex: 1 }}>
+      <ActivityIndicator visible={loading} />
       <Screen style={styles.container}>
         <View style={styles.logoContainer}>
           <Image style={styles.icon} source={require("../assets/icon.png")} />
@@ -67,7 +72,7 @@ function SignUpScreen({ navigation }) {
               secureTextEntry
               textContentType="password"
             />
-            <SubmitButton title="Sign Up" />
+            <SubmitButton title={"Sign Up"} />
           </Form>
         </View>
       </Screen>
