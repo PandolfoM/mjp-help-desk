@@ -1,5 +1,4 @@
 import * as Yup from "yup";
-import { collection, getDocs, query, where } from "firebase/firestore";
 import {
   Alert,
   KeyboardAvoidingView,
@@ -10,7 +9,6 @@ import React, { useContext, useEffect, useState } from "react";
 
 import { AppForm as Form, AppFormField as FormField } from "../components/form";
 import { AuthContext } from "../auth/context";
-import { db } from "../../firebaseConfig";
 import ActivityIndicator from "../components/ActivityIndicator";
 import useNotifications from "../hooks/useNotifications";
 import SubmitButton from "../components/form/SubmitButton";
@@ -19,7 +17,7 @@ import Screen from "../components/Screen";
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().min(1).label("Name"),
   email: Yup.string().required().email().label("Email"),
-  company: Yup.string().label("Company"),
+  company: Yup.string().required().min(1).label("Company"),
   message: Yup.string().required().min(1).label("Message"),
 });
 

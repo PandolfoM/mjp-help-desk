@@ -21,11 +21,11 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required().min(8).label("Password"),
 });
 
-function SignUpScreen() {
+function SignUpScreen({ navigation }) {
   const { signUp } = useAuth();
 
   const handleSubmit = async (values) => {
-    signUp(values);
+    await signUp(values);
   };
 
   return (

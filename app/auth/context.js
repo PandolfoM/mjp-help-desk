@@ -8,6 +8,7 @@ export const AuthContext = createContext();
 export const AuthContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isSignedUp, setIsSignedUp] = useState(false);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -33,7 +34,14 @@ export const AuthContextProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ currentUser, setCurrentUser, isAdmin, setIsAdmin }}>
+      value={{
+        currentUser,
+        setCurrentUser,
+        isAdmin,
+        setIsAdmin,
+        isSignedUp,
+        setIsSignedUp,
+      }}>
       {children}
     </AuthContext.Provider>
   );

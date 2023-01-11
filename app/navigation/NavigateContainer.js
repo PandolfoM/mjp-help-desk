@@ -8,11 +8,15 @@ import { navigationRef } from "./rootNavigation";
 import AppNavigator from "./AppNavigator";
 
 function NavigateContainer() {
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, isSignedUp } = useContext(AuthContext);
 
   return (
     <NavigationContainer ref={navigationRef} theme={navigationTheme}>
-      {currentUser ? <AppNavigator /> : <AuthNavigator />}
+      {currentUser?.displayName || isSignedUp ? (
+        <AppNavigator />
+      ) : (
+        <AuthNavigator />
+      )}
     </NavigationContainer>
   );
 }

@@ -12,7 +12,8 @@ import { AuthContext } from "./context";
 import { auth, db } from "../../firebaseConfig";
 
 export default useAuth = () => {
-  const { currentUser, setCurrentUser } = useContext(AuthContext);
+  const { currentUser, setCurrentUser, setIsSignedUp } =
+    useContext(AuthContext);
 
   const signIn = ({ email, password }) => {
     signInWithEmailAndPassword(auth, email, password)
@@ -47,7 +48,8 @@ export default useAuth = () => {
       } catch (e) {
         console.error(e);
       }
-      setCurrentUser(res.user);
+      await setCurrentUser(res.user);
+      setIsSignedUp(true);
     } catch (e) {
       console.error(e);
     }
