@@ -1,6 +1,7 @@
 import * as Yup from "yup";
 import {
   Alert,
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
@@ -36,7 +37,7 @@ function SubmitScreen() {
           {
             text: "No",
             onPress: () => {
-              return;
+              return setLoading(false);
             },
           },
           {
@@ -55,6 +56,7 @@ function SubmitScreen() {
         ]
       );
     } else {
+      Keyboard.dismiss();
       sendPushNotification({
         title: "New Message",
         body: data.name + " has sent you a message",

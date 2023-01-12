@@ -4,7 +4,6 @@ import React, { useContext } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { AuthContext } from "../auth/context";
-import ItemSeparator from "../components/ItemSeparator";
 import AppText from "../components/Text";
 import colors from "../config/colors";
 import defaultStyles from "../config/styles";
@@ -81,13 +80,19 @@ function MessageDetailsScreen({ route }) {
               </AppText>
             </View>
 
-            <View style={styles.textContainer}>
-              <AppText>Note:</AppText>
-              <AppText
-                style={[defaultStyles.textInput, styles.text, styles.message]}>
-                {message.note}
-              </AppText>
-            </View>
+            {message.note && (
+              <View style={styles.textContainer}>
+                <AppText>Note:</AppText>
+                <AppText
+                  style={[
+                    defaultStyles.textInput,
+                    styles.text,
+                    styles.message,
+                  ]}>
+                  {message.note}
+                </AppText>
+              </View>
+            )}
           </>
         )}
       </ScrollView>

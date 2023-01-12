@@ -37,10 +37,7 @@ export default useNotifications = (notificationListener) => {
       try {
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
-          setTokens((current) => [
-            ...current,
-            ...doc.data().notificationTokens,
-          ]);
+          setTokens([...doc.data().notificationTokens]);
         });
       } catch (e) {
         console.log(e);
@@ -109,20 +106,18 @@ export default useNotifications = (notificationListener) => {
   };
 
   const sendPushNotification = ({ title, body, company }) => {
-    tokens.forEach((t) => {
-      fetch("https://exp.host/--/api/v2/push/send", {
-        body: JSON.stringify({
-          to: t,
-          title: title,
-          subtitle: company,
-          body: body,
-          sound: "default",
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-      });
+    fetch("https://exp.host/--/api/v2/push/send", {
+      body: JSON.stringify({
+        to: tokens,
+        title: title,
+        subtitle: company,
+        body: body,
+        sound: "default",
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
     });
   };
 
