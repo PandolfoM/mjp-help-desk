@@ -4,6 +4,7 @@ import React, { useContext } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { AuthContext } from "../auth/context";
+import ProgressBar from "../components/ProgressBar";
 import AppText from "../components/Text";
 import colors from "../config/colors";
 import defaultStyles from "../config/styles";
@@ -95,6 +96,15 @@ function MessageDetailsScreen({ route }) {
             )}
           </>
         )}
+
+        {!message.adminPage && (
+          <ProgressBar
+            width={
+              message.completed ? 100 : message.read ? 50 : !message.read && 15
+            }
+            style={styles.progress}
+          />
+        )}
       </ScrollView>
     </View>
   );
@@ -118,6 +128,9 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     paddingVertical: 5,
+  },
+  progress: {
+    marginVertical: 5,
   },
 });
 

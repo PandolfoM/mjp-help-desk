@@ -39,7 +39,7 @@ function AdminMsgsCompletedScreen({ navigation }) {
         setCompletedMessages((current) => [...current, i]);
       }
     });
-  }, [messages]);
+  }, [messages, refreshing]);
 
   const refreshMessages = async () => {
     // Clear existing messages so it doesn't duplicate
@@ -61,10 +61,9 @@ function AdminMsgsCompletedScreen({ navigation }) {
         tempArr.sort((x, y) => {
           return y.date - x.date;
         });
-
-        setMessages(tempArr);
       }
     });
+    setMessages(tempArr);
     // clear loading
     setLoading(false);
     setRefreshing(false);

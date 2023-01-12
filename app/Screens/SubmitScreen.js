@@ -14,6 +14,7 @@ import ActivityIndicator from "../components/ActivityIndicator";
 import useNotifications from "../hooks/useNotifications";
 import SubmitButton from "../components/form/SubmitButton";
 import Screen from "../components/Screen";
+import ProgressBar from "../components/ProgressBar";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().min(1).label("Name"),

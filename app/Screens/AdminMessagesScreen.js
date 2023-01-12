@@ -43,7 +43,7 @@ function AdminMessagesScreen({ navigation }) {
         setOutgoingMessages((current) => [...current, i]);
       }
     });
-  }, [messages]);
+  }, [messages, refreshing]);
 
   const refreshMessages = async () => {
     // Clear existing messages so it doesn't duplicate
@@ -65,16 +65,15 @@ function AdminMessagesScreen({ navigation }) {
         tempArr.sort((x, y) => {
           return y.date - x.date;
         });
-
-        setMessages(tempArr);
       }
     });
+    setMessages(tempArr);
     // clear loading
     setLoading(false);
     setRefreshing(false);
   };
 
-  const handleRead = async (message, email) => {
+  const handleRead = async (message, email, force) => {
     // get the user who sent the message
     const q = query(collection(db, "users"), where("email", "==", email));
     const querySnap = await getDocs(q);
@@ -101,13 +100,13 @@ function AdminMessagesScreen({ navigation }) {
     // toggle between read and unread
     newArr[messageIndex] = {
       ...newArr[messageIndex],
-      read: !newArr[messageIndex].read,
+      read: force ? true : !newArr[messageIndex].read,
     };
 
     // toggle between read and unread for the global array
     globalArr[globalMessageIndex] = {
       ...globalArr[globalMessageIndex],
-      read: !globalArr[globalMessageIndex].read,
+      read: force ? true : !globalArr[globalMessageIndex].read,
     };
 
     // set the messages state to the new array
@@ -260,7 +259,17 @@ function AdminMessagesScreen({ navigation }) {
                 "MM/DD/YYYY, h:mm:ss A"
               )}
               clickable
-              onPress={() => navigation.navigate(routes.MESSAGE_DETAILS, item)}
+              onPress={async () => {
+                handleRead(item.id, item.email, true);
+                navigation.setParams({
+                  item,
+                  adminScreen: true,
+                });
+                navigation.navigate(routes.MESSAGE_DETAILS, {
+                  ...item,
+                  adminPage: true,
+                });
+              }}
               renderRightActions={() => (
                 <>
                   <ListItemDeleteActions
